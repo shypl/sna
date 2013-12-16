@@ -1,2 +1,2 @@
-sna
+Social Network Adapter
 ===
