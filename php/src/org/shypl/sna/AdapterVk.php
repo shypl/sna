@@ -1,10 +1,10 @@
 <?php
 namespace org\shypl\sna;
 
-use org\shypl\http\HttpRequest;
-use org\shypl\http\HttpResponse;
+use org\shypl\app\HttpRequest;
+use org\shypl\app\HttpResponse;
 
-class AdapterVk extends Adapter
+class AdapterVk extends SocialNetworkAdapter
 {
 	const ID = 1;
 	const NAME = "vk";
@@ -40,7 +40,7 @@ class AdapterVk extends Adapter
 	 */
 	public function validateRequest(HttpRequest $request)
 	{
-		if ($request->containsParam('sig')) {
+		if ($request->hasParam('sig')) {
 			$params = $request->params();
 			$sig = $params['sig'];
 			unset($params['sig']);
@@ -58,8 +58,8 @@ class AdapterVk extends Adapter
 	 */
 	public function authRequest(HttpRequest $request)
 	{
-		return $request->containsParam('auth_key')
-		&& $request->containsParam('viewer_id')
+		return $request->hasParam('auth_key')
+		&& $request->hasParam('viewer_id')
 		&& $request->param('auth_key')
 		=== md5($this->apiId . '_' . $request->param('viewer_id') . '_' . $this->secretKey);
 	}
@@ -90,7 +90,7 @@ class AdapterVk extends Adapter
 			PaymentRequestException::SERVER_ERROR      => 100,
 		);
 
-		return HttpResponse::factoryJson(array('error' => array(
+		return HttpResponse::factory(HttpResponse::TYPE_JSON, array('error' => array(
 			'error_code' => $codes[$e->getCode()],
 			'error_msg'  => $e->getMessage(),
 			'critical'   => $e->critical
@@ -206,6 +206,6 @@ class AdapterVk extends Adapter
 				throw new PaymentRequestException(PaymentRequestException::BAD_PARAMS);
 		}
 
-		return HttpResponse::factoryJson(array('response' => $response));
+		return HttpResponse::factory(HttpResponse::TYPE_JSON, array('response' => $response));
 	}
 }

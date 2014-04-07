@@ -1,11 +1,10 @@
 <?php
 namespace org\shypl\sna;
 
-use org\shypl\http\HttpHeader;
-use org\shypl\http\HttpRequest;
-use org\shypl\http\HttpResponse;
+use org\shypl\app\HttpRequest;
+use org\shypl\app\HttpResponse;
 
-class AdapterOk extends Adapter
+class AdapterOk extends SocialNetworkAdapter
 {
 	const ID = 3;
 	const NAME = "ok";
@@ -36,7 +35,7 @@ class AdapterOk extends Adapter
 	 */
 	public function validateRequest(HttpRequest $request)
 	{
-		if ($request->containsParam('sig')) {
+		if ($request->hasParam('sig')) {
 			$params = $request->params();
 			$sig = $params['sig'];
 			unset($params['sig']);
@@ -54,9 +53,9 @@ class AdapterOk extends Adapter
 	 */
 	public function authRequest(HttpRequest $request)
 	{
-		return $request->containsParam('auth_sig')
-		&& $request->containsParam('logged_user_id')
-		&& $request->containsParam('session_key')
+		return $request->hasParam('auth_sig')
+		&& $request->hasParam('logged_user_id')
+		&& $request->hasParam('session_key')
 		&& $request->param('auth_sig')
 		=== md5($request->param('logged_user_id') . $request->param('session_key') . $this->secretKey);
 	}
@@ -81,33 +80,41 @@ class AdapterOk extends Adapter
 		switch ($e->getCode()) {
 			case PaymentRequestException::BAD_SIGNATURE:
 				$code = 104;
-				$body
-					= '<?xml version="1.0" encoding="UTF-8"?><ns2:error_response xmlns:ns2="http://api.forticom.com/1.0/"><error_code>104</error_code><error_msg>PARAM_SIGNATURE: Invalid signature</error_msg></ns2:error_response>';
+				$body = '<?xml version="1.0" encoding="UTF-8"?>' .
+					'<ns2:error_response xmlns:ns2="http://api.forticom.com/1.0/">' .
+					'<error_code>104</error_code><error_msg>PARAM_SIGNATURE: Invalid signature</error_msg>' .
+					'</ns2:error_response>';
 				break;
 
 			case PaymentRequestException::SERVER_ERROR:
 				$code = 2;
-				$body
-					= '<?xml version="1.0" encoding="UTF-8"?><ns2:error_response xmlns:ns2="http://api.forticom.com/1.0/"><error_code>2</error_code><error_msg>SERVICE: Service temporary unavailable</error_msg></ns2:error_response>';
+				$body = '<?xml version="1.0" encoding="UTF-8"?>' .
+					'<ns2:error_response xmlns:ns2="http://api.forticom.com/1.0/">' .
+					'<error_code>2</error_code><error_msg>SERVICE: Service temporary unavailable</error_msg>' .
+					'</ns2:error_response>';
 				break;
 
 			case PaymentRequestException::BAD_PARAMS:
 			case PaymentRequestException::USER_NOT_FOUND:
 			case PaymentRequestException::PRODUCT_NOT_FOUND:
 				$code = 1001;
-				$body
-					= '<?xml version="1.0" encoding="UTF-8"?><ns2:error_response xmlns:ns2="http://api.forticom.com/1.0/"><error_code>1001</error_code><error_msg>CALLBACK_INVALID_PAYMENT: Payment is invalid and can not be processed</error_msg></ns2:error_response>';
+				$body = '<?xml version="1.0" encoding="UTF-8"?>' .
+					'<ns2:error_response xmlns:ns2="http://api.forticom.com/1.0/">' .
+					'<error_code>1001</error_code><error_msg>CALLBACK_INVALID_PAYMENT: Payment is invalid and can not be processed</error_msg>' .
+					'</ns2:error_response>';
 				break;
 
 			default:
 				$code = 1;
-				$body
-					= '<?xml version="1.0" encoding="UTF-8"?><ns2:error_response xmlns:ns2="http://api.forticom.com/1.0/"><error_code>1</error_code><error_msg>UNKNOWN: Unknown error</error_msg></ns2:error_response>';
+				$body = '<?xml version="1.0" encoding="UTF-8"?>' .
+					'<ns2:error_response xmlns:ns2="http://api.forticom.com/1.0/">' .
+					'<error_code>1</error_code><error_msg>UNKNOWN: Unknown error</error_msg>' .
+					'</ns2:error_response>';
 				break;
 		}
 
-		$response = HttpResponse::factoryXml($body);
-		$response->addHeader(new HttpHeader('invocation-error', $code));
+		$response = HttpResponse::factory(HttpResponse::TYPE_XML, $body);
+		$response->setHeader('invocation-error', $code);
 
 		return $response;
 	}
@@ -153,15 +160,15 @@ class AdapterOk extends Adapter
 	protected function defineFlashParams0(HttpRequest $request)
 	{
 		return 'ak=' . $this->applicationKey
-			. ';sk=' . $this->secretKey
-			. ';ac=' . $request->param("apiconnection")
-			. ';sek=' . $request->param("session_key")
-			. ';sesk=' . $request->param("session_secret_key")
-			. ';as=' . $request->param("api_server");
+		. ';sk=' . $this->secretKey
+		. ';ac=' . $request->param("apiconnection")
+		. ';sek=' . $request->param("session_key")
+		. ';sesk=' . $request->param("session_secret_key")
+		. ';as=' . $request->param("api_server");
 	}
 
 	/**
-	 * @param HttpRequest $request
+	 * @param HttpRequest            $request
 	 * @param IPaymentRequestHandler $handler
 	 *
 	 * @return HttpResponse
@@ -183,6 +190,7 @@ class AdapterOk extends Adapter
 
 		$handler->buyProduct($product, $paymentRequest);
 
-		return HttpResponse::factoryXml('<?xml version="1.0" encoding="UTF-8"?><callbacks_payment_response xmlns="http://api.forticom.com/1.0/">true</callbacks_payment_response>');
+		return HttpResponse::factory(HttpResponse::TYPE_XML,
+			'<?xml version="1.0" encoding="UTF-8"?><callbacks_payment_response xmlns="http://api.forticom.com/1.0/">true</callbacks_payment_response>');
 	}
 }

@@ -1,10 +1,10 @@
 <?php
 namespace org\shypl\sna;
 
-use org\shypl\http\HttpRequest;
-use org\shypl\http\HttpResponse;
+use org\shypl\app\HttpRequest;
+use org\shypl\app\HttpResponse;
 
-class AdapterMm extends Adapter
+class AdapterMm extends SocialNetworkAdapter
 {
 	const ID = 2;
 	const NAME = "mm";
@@ -41,7 +41,7 @@ class AdapterMm extends Adapter
 	 */
 	public function validateRequest(HttpRequest $request)
 	{
-		if ($request->containsParam('sig')) {
+		if ($request->hasParam('sig')) {
 			$params = $request->params();
 			$sig = $params['sig'];
 			unset($params['sig']);
@@ -102,12 +102,12 @@ class AdapterMm extends Adapter
 				break;
 		}
 
-		return HttpResponse::factoryJson($r);
+		return HttpResponse::factory(HttpResponse::TYPE_JSON, $r);
 	}
 
 	/**
 	 * @param string $method
-	 * @param array $params
+	 * @param array  $params
 	 *
 	 * @return string
 	 */
@@ -148,7 +148,7 @@ class AdapterMm extends Adapter
 	}
 
 	/**
-	 * @param HttpRequest $request
+	 * @param HttpRequest            $request
 	 * @param IPaymentRequestHandler $handler
 	 *
 	 * @return HttpResponse
@@ -181,6 +181,6 @@ class AdapterMm extends Adapter
 
 		$handler->buyProduct($product, $paymentRequest);
 
-		return HttpResponse::factoryJson(array('status' => 1));
+		return HttpResponse::factory(HttpResponse::TYPE_JSON, array('status' => 1));
 	}
 }

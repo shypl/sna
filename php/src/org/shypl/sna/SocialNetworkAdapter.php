@@ -2,17 +2,34 @@
 namespace org\shypl\sna;
 
 use InvalidArgumentException;
-use org\shypl\http\HttpRequest;
-use org\shypl\http\HttpResponse;
+use org\shypl\app\HttpRequest;
+use org\shypl\app\HttpResponse;
 
-abstract class Adapter
+abstract class SocialNetworkAdapter
 {
+	/**
+	 * @param string $name
+	 *
+	 * @return bool
+	 */
+	static public function exists($name)
+	{
+		switch (strtolower($name)) {
+			case AdapterVk::NAME:
+			case AdapterMm::NAME:
+			case AdapterOk::NAME:
+				return true;
+		}
+
+		return false;
+	}
+
 	/**
 	 * @param string $name
 	 * @param array  $params
 	 *
 	 * @throws \InvalidArgumentException
-	 * @return Adapter
+	 * @return SocialNetworkAdapter
 	 */
 	static public function factory($name, array $params)
 	{
@@ -72,11 +89,11 @@ abstract class Adapter
 	/**
 	 * @param HttpRequest $request
 	 *
-	 * @return RequestAdapterWrap
+	 * @return RequestWrap
 	 */
 	public function createRequestWrap(HttpRequest $request)
 	{
-		return new RequestAdapterWrap($this, $request);
+		return new RequestWrap($this, $request);
 	}
 
 	/**
@@ -182,11 +199,11 @@ abstract class Adapter
 	protected function sendPostRequest($url, array $params)
 	{
 		$context = stream_context_create(array('http' => array(
-			'method'        => 'POST',
-			'timeout'       => 30,
+			'method' => 'POST',
+			'timeout' => 30,
 			'ignore_errors' => true,
-			'header'        => 'Content-type: application/x-www-form-urlencoded',
-			'content'       => http_build_query($params)
+			'header' => 'Content-type: application/x-www-form-urlencoded',
+			'content' => http_build_query($params)
 		)));
 
 		return file_get_contents($url, false, $context);
