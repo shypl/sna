@@ -1,22 +1,21 @@
 <?php
 namespace org\shypl\sna;
 
-class AdapterVk extends SocialNetworkAdapter
+use org\shypl\http\HttpRequest;
+use org\shypl\http\HttpResponse;
+
+class AdapterVk extends Adapter
 {
 	const ID = 1;
-
 	const NAME = "vk";
-
 	/**
 	 * @var string
 	 */
 	private $apiId;
-
 	/**
 	 * @var string
 	 */
 	private $secretKey;
-
 	/**
 	 * @var bool
 	 */
@@ -35,42 +34,67 @@ class AdapterVk extends SocialNetworkAdapter
 	}
 
 	/**
-	 * @param array $requestParams
+	 * @param HttpRequest $request
 	 *
 	 * @return bool
 	 */
-	public function validateRequest(array $requestParams)
+	public function validateRequest(HttpRequest $request)
 	{
-		if (!isset($requestParams['sig'])) {
-			return false;
+		if ($request->containsParam('sig')) {
+			$params = $request->params();
+			$sig = $params['sig'];
+			unset($params['sig']);
+
+			return $sig === $this->obtainSignature($params);
 		}
 
-		$sig = $requestParams['sig'];
-		unset($requestParams['sig']);
-
-		return $sig === $this->obtainSignature($requestParams);
+		return false;
 	}
 
 	/**
-	 * @param array $requestParams
+	 * @param HttpRequest $request
 	 *
 	 * @return bool
 	 */
-	public function authRequest(array $requestParams)
+	public function authRequest(HttpRequest $request)
 	{
-		return isset($requestParams['auth_key'])
-		&& isset($requestParams['viewer_id'])
-		&& $requestParams['auth_key'] === md5($this->apiId . '_' . $requestParams['viewer_id'] . '_' . $this->secretKey);
+		return $request->containsParam('auth_key')
+		&& $request->containsParam('viewer_id')
+		&& $request->param('auth_key')
+		=== md5($this->apiId . '_' . $request->param('viewer_id') . '_' . $this->secretKey);
 	}
 
 	/**
-	 * @param array $requestParams
+	 * @param HttpRequest $request
 	 *
 	 * @return string
 	 */
-	public function defineRequestUserId(array $requestParams)
+	public function defineRequestUserId(HttpRequest $request)
 	{
-		return $requestParams['viewer_id'];
+		return $request->param('viewer_id');
+	}
+
+	/**
+	 * @param PaymentRequestException $e
+	 *
+	 * @return HttpResponse
+	 */
+	public function createPaymentRequestErrorResponse(PaymentRequestException $e)
+	{
+		static $codes
+		= array(
+			PaymentRequestException::BAD_SIGNATURE     => 10,
+			PaymentRequestException::BAD_PARAMS        => 11,
+			PaymentRequestException::USER_NOT_FOUND    => 22,
+			PaymentRequestException::PRODUCT_NOT_FOUND => 20,
+			PaymentRequestException::SERVER_ERROR      => 100,
+		);
+
+		return HttpResponse::factoryJson(array('error' => array(
+			'error_code' => $codes[$e->getCode()],
+			'error_msg'  => $e->getMessage(),
+			'critical'   => $e->critical
+		)));
 	}
 
 	/**
@@ -118,18 +142,70 @@ class AdapterVk extends SocialNetworkAdapter
 	}
 
 	/**
-	 * @param array $requestParams
+	 * @param HttpRequest $request
 	 *
 	 * @return string
 	 */
-	protected function doDefineFlashParams(array $requestParams)
+	protected function defineFlashParams0(HttpRequest $request)
 	{
-		$str = 'acn=' . $requestParams['lc_name'];
+		$str = 'acn=' . $request->param('lc_name');
 
 		if ($this->testMode) {
 			$str .= ';tm=1';
 		}
 
 		return $str;
+	}
+
+	/**
+	 * @param HttpRequest            $request
+	 * @param IPaymentRequestHandler $handler
+	 *
+	 * @return HttpResponse
+	 */
+	protected function processPaymentRequest0(HttpRequest $request, IPaymentRequestHandler $handler)
+	{
+		switch ($request->param('notification_type')) {
+			case 'get_item':
+			case 'get_item_test':
+				$product = $handler->defineProduct($request->param('item'), $request->param('user_id'));
+				$response = array(
+					'item_id'   => $product->id(),
+					'title'     => $product->name(),
+					'price'     => $product->price(),
+					'photo_url' => $product->img()
+				);
+				break;
+
+			case 'order_status_change':
+			case 'order_status_change_test':
+
+				if ($request->param('status') !== 'chargeable') {
+					throw new PaymentRequestException(PaymentRequestException::BAD_PARAMS);
+				}
+
+				$paymentRequest = new PaymentRequest(
+					$request->param('order_id'),
+					$request->param('user_id'),
+					$request->param('item_id'),
+					$request->param('item_price')
+				);
+
+				$product = $handler->defineProduct($paymentRequest->productId(), $paymentRequest->userId());
+
+				if ($product->price() !== $paymentRequest->productPrice()) {
+					throw new PaymentRequestException(PaymentRequestException::PRODUCT_NOT_FOUND);
+				}
+
+				$paymentId = $handler->buyProduct($product, $paymentRequest);
+
+				$response = array('order_id' => $paymentRequest->orderId(), 'app_order_id' => $paymentId);
+				break;
+
+			default:
+				throw new PaymentRequestException(PaymentRequestException::BAD_PARAMS);
+		}
+
+		return HttpResponse::factoryJson(array('response' => $response));
 	}
 }

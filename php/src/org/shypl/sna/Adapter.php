@@ -2,32 +2,17 @@
 namespace org\shypl\sna;
 
 use InvalidArgumentException;
+use org\shypl\http\HttpRequest;
+use org\shypl\http\HttpResponse;
 
-abstract class SocialNetworkAdapter
+abstract class Adapter
 {
-	/**
-	 * @param string $name
-	 *
-	 * @return bool
-	 */
-	static public function exists($name)
-	{
-		switch (strtolower($name)) {
-			case AdapterVk::NAME:
-			case AdapterMm::NAME:
-			case AdapterOk::NAME:
-				return true;
-		}
-
-		return false;
-	}
-
 	/**
 	 * @param string $name
 	 * @param array  $params
 	 *
 	 * @throws \InvalidArgumentException
-	 * @return SocialNetworkAdapter
+	 * @return Adapter
 	 */
 	static public function factory($name, array $params)
 	{
@@ -47,12 +32,10 @@ abstract class SocialNetworkAdapter
 	 * @var int
 	 */
 	private $id;
-
 	/**
 	 * @var string
 	 */
 	private $name;
-
 	/**
 	 * @var string
 	 */
@@ -86,9 +69,14 @@ abstract class SocialNetworkAdapter
 		return $this->name;
 	}
 
-	public function createRequestWrap(array $requestParams)
+	/**
+	 * @param HttpRequest $request
+	 *
+	 * @return RequestAdapterWrap
+	 */
+	public function createRequestWrap(HttpRequest $request)
 	{
-		return new RequestWrap($this, $requestParams);
+		return new RequestAdapterWrap($this, $request);
 	}
 
 	/**
@@ -103,37 +91,70 @@ abstract class SocialNetworkAdapter
 	}
 
 	/**
-	 * @param array $requestParams
+	 * @param HttpRequest            $request
+	 * @param IPaymentRequestHandler $handler
 	 *
-	 * @return bool
+	 * @return HttpResponse
 	 */
-	public abstract function authRequest(array $requestParams);
+	public function processPaymentRequest(HttpRequest $request, IPaymentRequestHandler $handler)
+	{
+		try {
+
+			if (!$this->validateRequest($request)) {
+				throw new PaymentRequestException(PaymentRequestException::BAD_SIGNATURE);
+			}
+
+			return $this->processPaymentRequest0($request, $handler);
+		}
+		catch (\Exception $e) {
+
+			if (!($e instanceof PaymentRequestException)) {
+				$e = new PaymentRequestException(PaymentRequestException::SERVER_ERROR, $e);
+			}
+
+			throw $e;
+		}
+	}
 
 	/**
-	 * @param array $requestParams
-	 *
-	 * @return bool
-	 */
-	public abstract function validateRequest(array $requestParams);
-
-	/**
-	 * @param array $requestParams
+	 * @param HttpRequest $request
 	 *
 	 * @return string
 	 */
-	public abstract function defineRequestUserId(array $requestParams);
-
-	/**
-	 * @param array $requestParams
-	 *
-	 * @return string
-	 */
-	public function defineFlashParams(array $requestParams)
+	public function defineFlashParams(HttpRequest $request)
 	{
 		return $this->name . ';'
-			. 'uid=' . $this->defineRequestUserId($requestParams) . ';'
-			. $this->doDefineFlashParams($requestParams);
+		. 'uid=' . $this->defineRequestUserId($request) . ';'
+		. $this->defineFlashParams0($request);
 	}
+
+	/**
+	 * @param HttpRequest $request
+	 *
+	 * @return bool
+	 */
+	public abstract function authRequest(HttpRequest $request);
+
+	/**
+	 * @param HttpRequest $request
+	 *
+	 * @return bool
+	 */
+	public abstract function validateRequest(HttpRequest $request);
+
+	/**
+	 * @param HttpRequest $request
+	 *
+	 * @return string
+	 */
+	public abstract function defineRequestUserId(HttpRequest $request);
+
+	/**
+	 * @param PaymentRequestException $e
+	 *
+	 * @return HttpResponse
+	 */
+	public abstract function createPaymentRequestErrorResponse(PaymentRequestException $e);
 
 	/**
 	 * @param array $params
@@ -187,9 +208,17 @@ abstract class SocialNetworkAdapter
 	protected abstract function receiveApiResponse($data);
 
 	/**
-	 * @param array $requestParams
+	 * @param HttpRequest $request
 	 *
 	 * @return string
 	 */
-	protected abstract function doDefineFlashParams(array $requestParams);
+	protected abstract function defineFlashParams0(HttpRequest $request);
+
+	/**
+	 * @param HttpRequest            $request
+	 * @param IPaymentRequestHandler $handler
+	 *
+	 * @return HttpResponse
+	 */
+	protected abstract function processPaymentRequest0(HttpRequest $request, IPaymentRequestHandler $handler);
 }

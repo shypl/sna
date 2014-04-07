@@ -1,17 +1,18 @@
 <?php
 namespace org\shypl\sna;
 
-class AdapterOk extends SocialNetworkAdapter
+use org\shypl\http\HttpHeader;
+use org\shypl\http\HttpRequest;
+use org\shypl\http\HttpResponse;
+
+class AdapterOk extends Adapter
 {
 	const ID = 3;
-
 	const NAME = "ok";
-
 	/**
 	 * @var string
 	 */
 	private $applicationKey;
-
 	/**
 	 * @var string
 	 */
@@ -29,43 +30,86 @@ class AdapterOk extends SocialNetworkAdapter
 	}
 
 	/**
-	 * @param array $requestParams
+	 * @param HttpRequest $request
 	 *
 	 * @return bool
 	 */
-	public function validateRequest(array $requestParams)
+	public function validateRequest(HttpRequest $request)
 	{
-		if (!isset($requestParams['sig'])) {
-			return false;
+		if ($request->containsParam('sig')) {
+			$params = $request->params();
+			$sig = $params['sig'];
+			unset($params['sig']);
+
+			return $sig === $this->obtainSignature($params);
 		}
 
-		$sig = $requestParams['sig'];
-		unset($requestParams['sig']);
-
-		return $sig === $this->obtainSignature($requestParams);
+		return false;
 	}
 
 	/**
-	 * @param array $requestParams
+	 * @param HttpRequest $request
 	 *
 	 * @return bool
 	 */
-	public function authRequest(array $requestParams)
+	public function authRequest(HttpRequest $request)
 	{
-		return isset($requestParams['auth_sig'])
-		&& isset($requestParams['logged_user_id'])
-		&& isset($requestParams['session_key'])
-		&& $requestParams['auth_sig'] === md5($requestParams['logged_user_id'] . $requestParams['session_key'] . $this->secretKey);
+		return $request->containsParam('auth_sig')
+		&& $request->containsParam('logged_user_id')
+		&& $request->containsParam('session_key')
+		&& $request->param('auth_sig')
+		=== md5($request->param('logged_user_id') . $request->param('session_key') . $this->secretKey);
 	}
 
 	/**
-	 * @param array $requestParams
+	 * @param HttpRequest $request
 	 *
 	 * @return string
 	 */
-	public function defineRequestUserId(array $requestParams)
+	public function defineRequestUserId(HttpRequest $request)
 	{
-		return $requestParams['logged_user_id'];
+		return $request->param('logged_user_id');
+	}
+
+	/**
+	 * @param PaymentRequestException $e
+	 *
+	 * @return HttpResponse
+	 */
+	public function createPaymentRequestErrorResponse(PaymentRequestException $e)
+	{
+		switch ($e->getCode()) {
+			case PaymentRequestException::BAD_SIGNATURE:
+				$code = 104;
+				$body
+					= '<?xml version="1.0" encoding="UTF-8"?><ns2:error_response xmlns:ns2="http://api.forticom.com/1.0/"><error_code>104</error_code><error_msg>PARAM_SIGNATURE: Invalid signature</error_msg></ns2:error_response>';
+				break;
+
+			case PaymentRequestException::SERVER_ERROR:
+				$code = 2;
+				$body
+					= '<?xml version="1.0" encoding="UTF-8"?><ns2:error_response xmlns:ns2="http://api.forticom.com/1.0/"><error_code>2</error_code><error_msg>SERVICE: Service temporary unavailable</error_msg></ns2:error_response>';
+				break;
+
+			case PaymentRequestException::BAD_PARAMS:
+			case PaymentRequestException::USER_NOT_FOUND:
+			case PaymentRequestException::PRODUCT_NOT_FOUND:
+				$code = 1001;
+				$body
+					= '<?xml version="1.0" encoding="UTF-8"?><ns2:error_response xmlns:ns2="http://api.forticom.com/1.0/"><error_code>1001</error_code><error_msg>CALLBACK_INVALID_PAYMENT: Payment is invalid and can not be processed</error_msg></ns2:error_response>';
+				break;
+
+			default:
+				$code = 1;
+				$body
+					= '<?xml version="1.0" encoding="UTF-8"?><ns2:error_response xmlns:ns2="http://api.forticom.com/1.0/"><error_code>1</error_code><error_msg>UNKNOWN: Unknown error</error_msg></ns2:error_response>';
+				break;
+		}
+
+		$response = HttpResponse::factoryXml($body);
+		$response->addHeader(new HttpHeader('invocation-error', $code));
+
+		return $response;
 	}
 
 	/**
@@ -102,12 +146,43 @@ class AdapterOk extends SocialNetworkAdapter
 	}
 
 	/**
-	 * @param array $requestParams
+	 * @param HttpRequest $request
 	 *
 	 * @return string
 	 */
-	protected function doDefineFlashParams(array $requestParams)
+	protected function defineFlashParams0(HttpRequest $request)
 	{
-		throw new \RuntimeException("TODO");
+		return 'ak=' . $this->applicationKey
+			. ';sk=' . $this->secretKey
+			. ';ac=' . $request->param("apiconnection")
+			. ';sek=' . $request->param("session_key")
+			. ';sesk=' . $request->param("session_secret_key")
+			. ';as=' . $request->param("api_server");
+	}
+
+	/**
+	 * @param HttpRequest $request
+	 * @param IPaymentRequestHandler $handler
+	 *
+	 * @return HttpResponse
+	 */
+	protected function processPaymentRequest0(HttpRequest $request, IPaymentRequestHandler $handler)
+	{
+		$paymentRequest = new PaymentRequest(
+			$request->param('transaction_id'),
+			$request->param('uid'),
+			$request->param('product_code'),
+			(int)$request->param('amount')
+		);
+
+		$product = $handler->defineProduct($paymentRequest->productId(), $paymentRequest->userId());
+
+		if ($product->price() !== $paymentRequest->productPrice()) {
+			throw new PaymentRequestException(PaymentRequestException::PRODUCT_NOT_FOUND);
+		}
+
+		$handler->buyProduct($product, $paymentRequest);
+
+		return HttpResponse::factoryXml('<?xml version="1.0" encoding="UTF-8"?><callbacks_payment_response xmlns="http://api.forticom.com/1.0/">true</callbacks_payment_response>');
 	}
 }

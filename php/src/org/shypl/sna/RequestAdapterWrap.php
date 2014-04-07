@@ -1,23 +1,25 @@
 <?php
 namespace org\shypl\sna;
 
-class RequestWrap
+use org\shypl\http\HttpRequest;
+
+class RequestAdapterWrap
 {
 	/**
-	 * @var SocialNetworkAdapter
+	 * @var Adapter
 	 */
 	private $adapter;
 
 	/**
-	 * @var array
+	 * @var HttpRequest
 	 */
 	private $params;
 
 	/**
-	 * @param SocialNetworkAdapter $adapter
-	 * @param array                $params
+	 * @param Adapter $adapter
+	 * @param HttpRequest          $params
 	 */
-	public function __construct(SocialNetworkAdapter $adapter, array $params)
+	public function __construct(Adapter $adapter, HttpRequest $params)
 	{
 		$this->adapter = $adapter;
 		$this->params = $params;

@@ -1,0 +1,15 @@
+<project name="Social Network Adapter">
+
+	<target name="build-php">
+		<delete file="bin/shypl-sna.phar"/>
+		<exec executable="phar">
+			<arg value="pack"/>
+			<arg value="-s"/>
+			<arg value="php/build/stub.php"/>
+			<arg value="-f"/>
+			<arg value="bin/shypl-sna.phar"/>
+			<arg value="php/src"/>
+		</exec>
+	</target>
+
+</project>
