@@ -2,8 +2,8 @@
 namespace org\shypl\sna;
 
 use InvalidArgumentException;
-use org\shypl\app\HttpRequest;
-use org\shypl\app\HttpResponse;
+use org\shypl\common\app\HttpRequest;
+use org\shypl\common\app\HttpResponse;
 
 abstract class SocialNetworkAdapter
 {
@@ -108,6 +108,21 @@ abstract class SocialNetworkAdapter
 	}
 
 	/**
+	 * @param string $data
+	 *
+	 * @return mixed
+	 */
+	protected abstract function receiveApiResponse($data);
+
+	/**
+	 * @param string $method
+	 * @param array  $params
+	 *
+	 * @return string
+	 */
+	protected abstract function requestApi($method, array $params);
+
+	/**
 	 * @param HttpRequest            $request
 	 * @param IPaymentRequestHandler $handler
 	 *
@@ -136,6 +151,21 @@ abstract class SocialNetworkAdapter
 	/**
 	 * @param HttpRequest $request
 	 *
+	 * @return bool
+	 */
+	public abstract function validateRequest(HttpRequest $request);
+
+	/**
+	 * @param HttpRequest            $request
+	 * @param IPaymentRequestHandler $handler
+	 *
+	 * @return HttpResponse
+	 */
+	protected abstract function processPaymentRequest0(HttpRequest $request, IPaymentRequestHandler $handler);
+
+	/**
+	 * @param HttpRequest $request
+	 *
 	 * @return string
 	 */
 	public function defineFlashParams(HttpRequest $request)
@@ -148,23 +178,23 @@ abstract class SocialNetworkAdapter
 	/**
 	 * @param HttpRequest $request
 	 *
-	 * @return bool
+	 * @return string
 	 */
-	public abstract function authRequest(HttpRequest $request);
-
-	/**
-	 * @param HttpRequest $request
-	 *
-	 * @return bool
-	 */
-	public abstract function validateRequest(HttpRequest $request);
+	public abstract function defineRequestUserId(HttpRequest $request);
 
 	/**
 	 * @param HttpRequest $request
 	 *
 	 * @return string
 	 */
-	public abstract function defineRequestUserId(HttpRequest $request);
+	protected abstract function defineFlashParams0(HttpRequest $request);
+
+	/**
+	 * @param HttpRequest $request
+	 *
+	 * @return bool
+	 */
+	public abstract function authRequest(HttpRequest $request);
 
 	/**
 	 * @param PaymentRequestException $e
@@ -199,43 +229,13 @@ abstract class SocialNetworkAdapter
 	protected function sendPostRequest($url, array $params)
 	{
 		$context = stream_context_create(array('http' => array(
-			'method' => 'POST',
-			'timeout' => 30,
+			'method'        => 'POST',
+			'timeout'       => 30,
 			'ignore_errors' => true,
-			'header' => 'Content-type: application/x-www-form-urlencoded',
-			'content' => http_build_query($params)
+			'header'        => 'Content-type: application/x-www-form-urlencoded',
+			'content'       => http_build_query($params)
 		)));
 
 		return file_get_contents($url, false, $context);
 	}
-
-	/**
-	 * @param string $method
-	 * @param array  $params
-	 *
-	 * @return string
-	 */
-	protected abstract function requestApi($method, array $params);
-
-	/**
-	 * @param string $data
-	 *
-	 * @return mixed
-	 */
-	protected abstract function receiveApiResponse($data);
-
-	/**
-	 * @param HttpRequest $request
-	 *
-	 * @return string
-	 */
-	protected abstract function defineFlashParams0(HttpRequest $request);
-
-	/**
-	 * @param HttpRequest            $request
-	 * @param IPaymentRequestHandler $handler
-	 *
-	 * @return HttpResponse
-	 */
-	protected abstract function processPaymentRequest0(HttpRequest $request, IPaymentRequestHandler $handler);
 }

@@ -1,8 +1,8 @@
 <?php
 namespace org\shypl\sna;
 
-use org\shypl\app\HttpRequest;
-use org\shypl\app\HttpResponse;
+use org\shypl\common\app\HttpRequest;
+use org\shypl\common\app\HttpResponse;
 
 class AdapterOk extends SocialNetworkAdapter
 {

@@ -1,8 +1,8 @@
 <?php
 namespace org\shypl\sna;
 
-use org\shypl\app\HttpRequest;
-use org\shypl\app\HttpResponse;
+use org\shypl\common\app\HttpRequest;
+use org\shypl\common\app\HttpResponse;
 
 class AdapterMm extends SocialNetworkAdapter
 {
@@ -39,6 +39,16 @@ class AdapterMm extends SocialNetworkAdapter
 	 *
 	 * @return bool
 	 */
+	public function authRequest(HttpRequest $request)
+	{
+		return $this->validateRequest($request);
+	}
+
+	/**
+	 * @param HttpRequest $request
+	 *
+	 * @return bool
+	 */
 	public function validateRequest(HttpRequest $request)
 	{
 		if ($request->hasParam('sig')) {
@@ -50,16 +60,6 @@ class AdapterMm extends SocialNetworkAdapter
 		}
 
 		return false;
-	}
-
-	/**
-	 * @param HttpRequest $request
-	 *
-	 * @return bool
-	 */
-	public function authRequest(HttpRequest $request)
-	{
-		return $this->validateRequest($request);
 	}
 
 	/**
