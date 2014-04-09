@@ -28,10 +28,12 @@ public class SocialNetwork
 
 	public final int    id;
 	public final String code;
+	public final int index;
 
-	public SocialNetwork(final int id, final String code)
+	private SocialNetwork(final int id, final String code)
 	{
 		this.id = id;
 		this.code = code;
+		index = id - 1;
 	}
 }
