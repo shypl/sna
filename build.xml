@@ -12,4 +12,11 @@
 		</exec>
 	</target>
 
+	<target name="build-java">
+		<mkdir dir="tmp"/>
+		<javac srcdir="java/src" destdir="tmp"/>
+		<jar destfile="bin/shypl-sna.jar" basedir="tmp"/>
+		<delete dir="tmp"/>
+	</target>
+
 </project>
