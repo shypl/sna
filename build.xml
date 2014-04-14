@@ -19,4 +19,18 @@
 		<delete dir="tmp"/>
 	</target>
 
+	<target name="build-flash">
+		<property environment="env"/>
+		<property name="FLEX_HOME" value="${env.FLEX_HOME}"/>
+
+		<java jar="${FLEX_HOME}/lib/compc.jar" dir="${basedir}" fork="true" failonerror="true">
+			<jvmarg value="-Dfile.encoding=UTF-8"/>
+			<arg value="+flexlib=${FLEX_HOME}/frameworks"/>
+			<arg value="-source-path+=flash/src"/>
+			<arg value="-include-sources=flash/src"/>
+			<arg value="-library-path+=flash/lib"/>
+			<arg value="-output=bin/shypl-sna.swc"/>
+		</java>
+	</target>
+
 </project>

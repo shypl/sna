@@ -171,7 +171,7 @@ abstract class SocialNetworkAdapter
 	public function defineFlashParams(HttpRequest $request)
 	{
 		return $this->name . ';'
-		. 'uid=' . $this->defineRequestUserId($request) . ';'
+		. 'u=' . $this->defineRequestUserId($request) . ';'
 		. $this->defineFlashParams0($request);
 	}
 

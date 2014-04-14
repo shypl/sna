@@ -2,11 +2,16 @@ package org.shypl.sna;
 
 public class SocialNetwork
 {
-	public static final SocialNetwork[] list = new SocialNetwork[]{
+	private static final SocialNetwork[] list = new SocialNetwork[]{
 		new SocialNetwork(1, "vk"),
 		new SocialNetwork(2, "mm"),
 		new SocialNetwork(3, "ok"),
 	};
+
+	public static SocialNetwork[] list()
+	{
+		return list.clone();
+	}
 
 	public static SocialNetwork get(String code)
 	{
@@ -28,7 +33,7 @@ public class SocialNetwork
 
 	public final int    id;
 	public final String code;
-	public final int index;
+	public final int    index;
 
 	private SocialNetwork(final int id, final String code)
 	{
