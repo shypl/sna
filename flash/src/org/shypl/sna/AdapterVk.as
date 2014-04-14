@@ -43,6 +43,7 @@ package org.shypl.sna
 		public function AdapterVk(network:SocialNetwork, params:Object)
 		{
 			super(network, params);
+			init0();
 		}
 
 		override protected function doDestroy():void
