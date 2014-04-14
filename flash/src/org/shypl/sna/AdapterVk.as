@@ -4,7 +4,6 @@ package org.shypl.sna
 
 	import org.shypl.common.logging.ILogger;
 	import org.shypl.common.logging.LogManager;
-	import org.shypl.common.util.IErrorHandler;
 	import org.shypl.common.util.StringUtils;
 
 	internal class AdapterVk extends SocialNetworkAdapter
@@ -41,20 +40,14 @@ package org.shypl.sna
 
 		///
 
-		public function AdapterVk(network:SocialNetwork, errorHandler:IErrorHandler, params:Object)
+		public function AdapterVk(network:SocialNetwork, params:Object)
 		{
-			super(network, errorHandler, params);
+			super(network, params);
 		}
 
 		override protected function doDestroy():void
 		{
 			super.doDestroy();
-		}
-
-		override protected function catchError(error:SocialNetworkError):void
-		{
-			logger.error(error.message);
-			super.catchError(error);
 		}
 
 		override protected function doGetUsers(ids:Vector.<String>, handler:IUserListHandler):void
@@ -70,6 +63,12 @@ package org.shypl.sna
 		override protected function doGetAppFriendIds(handler:IUserIdListHandler):void
 		{
 			callApi("friends.getAppUsers", null, handler);
+		}
+
+		private function catchError(error:SocialNetworkError):void
+		{
+			logger.error(error.message);
+			throw error;
 		}
 
 		private function callApi(method:String, params:Object, handler:Object):void
