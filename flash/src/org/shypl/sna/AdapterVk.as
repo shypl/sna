@@ -40,9 +40,12 @@ package org.shypl.sna
 
 		///
 
+		private var _testMode:Boolean;
+
 		public function AdapterVk(network:SocialNetwork, params:Object)
 		{
 			super(network, params);
+			_testMode = params.tm;
 			init0();
 		}
 
@@ -75,6 +78,10 @@ package org.shypl.sna
 		private function callApi(method:String, params:Object, handler:Object):void
 		{
 			const callbackId:int = registerCallbackHandler(handler);
+
+			if (_testMode) {
+				params.test_mode = true;
+			}
 
 			logger.debug("Call api [{}] {}({})", callbackId, method, params);
 
