@@ -74,6 +74,10 @@ package org.shypl.sna
 		{
 			const callbackId:int = registerCallbackHandler(handler);
 
+			if (params == null) {
+				params = {};
+			}
+
 			if (_testMode) {
 				params.test_mode = true;
 			}
