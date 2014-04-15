@@ -1,5 +1,7 @@
 package org.shypl.sna
 {
+	import org.shypl.common.util.IErrorHandler;
+
 	public class SocialNetwork
 	{
 		public static const VK:SocialNetwork = new SocialNetwork(1, "vk", AdapterVk);
@@ -55,9 +57,9 @@ package org.shypl.sna
 			return _code;
 		}
 
-		internal function createAdapter(params:Object):SocialNetworkAdapter
+		internal function createAdapter(errorHandler:IErrorHandler, params:Object):SocialNetworkAdapter
 		{
-			return new _adapterClass(this, params);
+			return new _adapterClass(this, errorHandler, params);
 		}
 	}
 }

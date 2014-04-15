@@ -4,6 +4,7 @@ package org.shypl.sna
 
 	import org.shypl.common.logging.ILogger;
 	import org.shypl.common.logging.LogManager;
+	import org.shypl.common.util.IErrorHandler;
 	import org.shypl.common.util.StringUtils;
 
 	internal class AdapterVk extends SocialNetworkAdapter
@@ -42,9 +43,9 @@ package org.shypl.sna
 
 		private var _testMode:Boolean;
 
-		public function AdapterVk(network:SocialNetwork, params:Object)
+		public function AdapterVk(network:SocialNetwork, errorHandler:IErrorHandler, params:Object)
 		{
-			super(network, params);
+			super(network, errorHandler, params);
 			_testMode = params.tm;
 			init0();
 		}
@@ -67,12 +68,6 @@ package org.shypl.sna
 		override protected function doGetAppFriendIds(handler:IUserIdListHandler):void
 		{
 			callApi("friends.getAppUsers", null, handler);
-		}
-
-		private function catchError(error:SocialNetworkError):void
-		{
-			logger.error(error.message);
-			throw error;
 		}
 
 		private function callApi(method:String, params:Object, handler:Object):void

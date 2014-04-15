@@ -7,11 +7,12 @@ package org.shypl.sna
 	import org.shypl.common.lang.AbstractMethodException;
 	import org.shypl.common.util.CollectionUtils;
 	import org.shypl.common.util.Destroyable;
+	import org.shypl.common.util.IErrorHandler;
 
 	[Abstract]
 	public class SocialNetworkAdapter extends Destroyable
 	{
-		public static function factoryByServerParams(params:String):SocialNetworkAdapter
+		public static function factoryByServerParams(errorHandler:IErrorHandler, params:String):SocialNetworkAdapter
 		{
 			const paramsArray:Array = params.split(";");
 			const paramsObject:Object = {};
@@ -22,12 +23,12 @@ package org.shypl.sna
 				paramsObject[entry.substr(0, i)] = entry.substr(i + 1);
 			}
 
-			return factory(code, paramsObject);
+			return factory(errorHandler, code, paramsObject);
 		}
 
-		public static function factory(code:String, params:Object):SocialNetworkAdapter
+		public static function factory(errorHandler:IErrorHandler, code:String, params:Object):SocialNetworkAdapter
 		{
-			return SocialNetwork.getByCode(code).createAdapter(params);
+			return SocialNetwork.getByCode(code).createAdapter(errorHandler, params);
 		}
 
 		private var _network:SocialNetwork;
@@ -37,10 +38,12 @@ package org.shypl.sna
 		private var _callTimer:Timer = new Timer(400, 1);
 		private var _lastCallbackId:int = 0;
 		private var _handlers:Object = {};
+		private var _errorHandler:IErrorHandler;
 
-		public function SocialNetworkAdapter(network:SocialNetwork, params:Object)
+		public function SocialNetworkAdapter(network:SocialNetwork, errorHandler:IErrorHandler, params:Object)
 		{
 			_network = network;
+			_errorHandler = errorHandler;
 			_sessionUserId = params.u;
 
 			_callTimer.addEventListener(TimerEvent.TIMER, handleCallTimerEvent);
@@ -96,6 +99,12 @@ package org.shypl.sna
 
 			CollectionUtils.clear(_handlers);
 			_handlers = null;
+		}
+
+		protected function catchError(error:SocialNetworkError):void
+		{
+			_errorHandler.handleError(error);
+			destroy();
 		}
 
 		protected final function completeInit():void
