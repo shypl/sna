@@ -68,6 +68,11 @@ package org.shypl.sna
 			return _sessionUserId;
 		}
 
+		public final function defineCurrencyLabel(number:Number):String
+		{
+			return _network.defineCurrencyLabel(number);
+		}
+
 		public final function getSessionUser(handler:IUserHandler):void
 		{
 			getUser(_sessionUserId, handler);
