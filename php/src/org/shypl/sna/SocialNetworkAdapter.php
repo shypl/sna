@@ -54,6 +54,10 @@ abstract class SocialNetworkAdapter
 	 */
 	private $name;
 	/**
+	 * @var int
+	 */
+	private $index;
+	/**
 	 * @var string
 	 */
 	private $signatureSalt;
@@ -67,6 +71,7 @@ abstract class SocialNetworkAdapter
 	{
 		$this->id = $id;
 		$this->name = $name;
+		$this->index = $id - 1;
 		$this->signatureSalt = $signatureSalt;
 	}
 
@@ -84,6 +89,14 @@ abstract class SocialNetworkAdapter
 	public function name()
 	{
 		return $this->name;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function index()
+	{
+		return $this->index;
 	}
 
 	/**

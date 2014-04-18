@@ -74,6 +74,7 @@ package org.shypl.sna
 
 		override protected function doInviteFriends():void
 		{
+			closeFullScreen();
 			callClient("showInviteBox");
 		}
 
@@ -82,8 +83,10 @@ package org.shypl.sna
 			if (_handlerMakePayment) {
 				throw new IllegalStateException();
 			}
-
 			_handlerMakePayment = handler;
+
+			closeFullScreen();
+
 			callClient("showOrderBox", [
 				{type: "item", item: id}
 			]);
