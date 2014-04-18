@@ -2,13 +2,14 @@ package org.shypl.sna
 {
 	import flash.display.Stage;
 
+	import org.shypl.common.lang.AbstractMethodException;
 	import org.shypl.common.util.IErrorHandler;
 
 	public class SocialNetwork
 	{
-		public static const VK:SocialNetwork = new SocialNetwork(1, "vk", AdapterVk);
-		public static const MM:SocialNetwork = new SocialNetwork(2, "mm", AdapterMm);
-		public static const OK:SocialNetwork = new SocialNetwork(3, "ok", AdapterOk);
+		public static const VK:SocialNetwork = new NetworkVk();
+		public static const MM:SocialNetwork = new NetworkMm();
+		public static const OK:SocialNetwork = new NetworkOk();
 
 		private static const _list:Vector.<SocialNetwork> = new <SocialNetwork>[VK, MM, OK];
 
@@ -40,13 +41,13 @@ package org.shypl.sna
 
 		private var _id:int;
 		private var _code:String;
-		private var _adapterClass:Class;
+		private var _index:int;
 
-		public function SocialNetwork(id:int, code:String, adapterClass:Class)
+		public function SocialNetwork(id:int, code:String)
 		{
 			_id = id;
 			_code = code;
-			_adapterClass = adapterClass;
+			_index = id - 1;
 		}
 
 		public function get id():int
@@ -59,9 +60,21 @@ package org.shypl.sna
 			return _code;
 		}
 
+		public function get index():int
+		{
+			return _index;
+		}
+
+		[Abstract]
+		public function defineCurrencyLabel(number:Number):String
+		{
+			throw new AbstractMethodException();
+		}
+
+		[Abstract]
 		internal function createAdapter(stage:Stage, errorHandler:IErrorHandler, params:Object):SocialNetworkAdapter
 		{
-			return new _adapterClass(stage, errorHandler, this, params);
+			throw new AbstractMethodException();
 		}
 	}
 }

@@ -7,9 +7,9 @@ package org.shypl.sna
 
 	internal class AdapterMm extends SocialNetworkAdapter
 	{
-		public function AdapterMm(stage:Stage, network:SocialNetwork, errorHandler:IErrorHandler, params:Object)
+		public function AdapterMm(stage:Stage, errorHandler:IErrorHandler, params:Object)
 		{
-			super(stage, errorHandler, network, params, LogManager.getByClass(AdapterMm));
+			super(stage, errorHandler, SocialNetwork.MM, params, LogManager.getByClass(AdapterMm));
 		}
 	}
 }

@@ -7,9 +7,9 @@ package org.shypl.sna
 
 	internal class AdapterOk extends SocialNetworkAdapter
 	{
-		public function AdapterOk(stage:Stage, network:SocialNetwork, errorHandler:IErrorHandler, params:Object)
+		public function AdapterOk(stage:Stage, errorHandler:IErrorHandler, params:Object)
 		{
-			super(stage, errorHandler, network, params, LogManager.getByClass(AdapterOk));
+			super(stage, errorHandler, SocialNetwork.OK, params, LogManager.getByClass(AdapterOk));
 		}
 	}
 }
