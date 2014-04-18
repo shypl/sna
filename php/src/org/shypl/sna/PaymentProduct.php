@@ -18,20 +18,26 @@ class PaymentProduct
 	/**
 	 * @var string
 	 */
-	private $img;
+	private $image;
+	/**
+	 * @var int
+	 */
+	private $expiration;
 
 	/**
 	 * @param string $id
 	 * @param string $name
 	 * @param int    $price
-	 * @param string $img
+	 * @param string $image
+	 * @param int    $expiration
 	 */
-	public function __construct($id, $name, $price, $img = null)
+	public function __construct($id, $name, $price, $image = null, $expiration = 0)
 	{
 		$this->id = $id;
 		$this->name = $name;
 		$this->price = $price;
-		$this->img = $img;
+		$this->image = $image;
+		$this->expiration = $expiration;
 	}
 
 	/**
@@ -61,8 +67,32 @@ class PaymentProduct
 	/**
 	 * @return string
 	 */
-	public function img()
+	public function image()
 	{
-		return $this->img;
+		return $this->image;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function expiration()
+	{
+		return $this->expiration;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function hasImage()
+	{
+		return !!$this->image;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function hasExpiration()
+	{
+		return $this->expiration > 0;
 	}
 }

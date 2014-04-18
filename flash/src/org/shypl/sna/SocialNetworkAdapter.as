@@ -1,10 +1,13 @@
 package org.shypl.sna
 {
+	import flash.display.Stage;
+	import flash.display.StageDisplayState;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 
 	import org.shypl.common.collection.LinkedList;
 	import org.shypl.common.lang.AbstractMethodException;
+	import org.shypl.common.logging.ILogger;
 	import org.shypl.common.util.CollectionUtils;
 	import org.shypl.common.util.Destroyable;
 	import org.shypl.common.util.IErrorHandler;
@@ -12,7 +15,7 @@ package org.shypl.sna
 	[Abstract]
 	public class SocialNetworkAdapter extends Destroyable
 	{
-		public static function factoryByServerParams(errorHandler:IErrorHandler, params:String):SocialNetworkAdapter
+		public static function factoryByServerParams(stage:Stage, errorHandler:IErrorHandler, params:String):SocialNetworkAdapter
 		{
 			const paramsArray:Array = params.split(";");
 			const paramsObject:Object = {};
@@ -23,14 +26,17 @@ package org.shypl.sna
 				paramsObject[entry.substr(0, i)] = entry.substr(i + 1);
 			}
 
-			return factory(errorHandler, code, paramsObject);
+			return factory(stage, errorHandler, code, paramsObject);
 		}
 
-		public static function factory(errorHandler:IErrorHandler, code:String, params:Object):SocialNetworkAdapter
+		public static function factory(stage:Stage, errorHandler:IErrorHandler, code:String, params:Object):SocialNetworkAdapter
 		{
-			return SocialNetwork.getByCode(code).createAdapter(errorHandler, params);
+			return SocialNetwork.getByCode(code).createAdapter(stage, errorHandler, params);
 		}
 
+		protected var _stage:Stage;
+		protected var _logger:ILogger;
+		private var _errorHandler:IErrorHandler;
 		private var _network:SocialNetwork;
 		private var _sessionUserId:String;
 		private var _inited:Boolean;
@@ -38,12 +44,13 @@ package org.shypl.sna
 		private var _callTimer:Timer = new Timer(400, 1);
 		private var _lastCallbackId:int = 0;
 		private var _handlers:Object = {};
-		private var _errorHandler:IErrorHandler;
 
-		public function SocialNetworkAdapter(network:SocialNetwork, errorHandler:IErrorHandler, params:Object)
+		public function SocialNetworkAdapter(stage:Stage, errorHandler:IErrorHandler, network:SocialNetwork, params:Object, logger:ILogger)
 		{
-			_network = network;
+			_stage = stage;
 			_errorHandler = errorHandler;
+			_network = network;
+			_logger = logger;
 			_sessionUserId = params.u;
 
 			_callTimer.addEventListener(TimerEvent.TIMER, handleCallTimerEvent);
@@ -86,6 +93,26 @@ package org.shypl.sna
 			pushCall(doGetAppFriendIds, arguments);
 		}
 
+		public final function inviteFriends():void
+		{
+			pushCall(doInviteFriends, arguments);
+		}
+
+		public final function makePayment(id:int, name:String, price:int, handler:IMakePaymentHandler):void
+		{
+			pushCall(doMakePayment, arguments);
+		}
+
+		public final function makeWallPost(userId:String, post:WallPost, handler:IMakeWallPostHandler):void
+		{
+			pushCall(doMakeWallPost, arguments);
+		}
+
+		public final function makeFriendsRequest(userId:String, request:FriendRequest, handler:IMakeFriendsRequestHandler):void
+		{
+			pushCall(doMakeFriendsRequest, arguments);
+		}
+
 		override protected function doDestroy():void
 		{
 			_network = null;
@@ -103,6 +130,7 @@ package org.shypl.sna
 
 		protected function catchError(error:SocialNetworkError):void
 		{
+			_logger.error(error.toString());
 			_errorHandler.handleError(error);
 			destroy();
 		}
@@ -146,6 +174,37 @@ package org.shypl.sna
 			throw new AbstractMethodException();
 		}
 
+		[Abstract]
+		protected function doInviteFriends():void
+		{
+			throw new AbstractMethodException();
+		}
+
+		[Abstract]
+		protected function doMakePayment(id:int, name:String, price:int, handler:IMakePaymentHandler):void
+		{
+			throw new AbstractMethodException();
+		}
+
+		[Abstract]
+		protected function doMakeWallPost(userId:String, post:WallPost, handler:IMakeWallPostHandler):void
+		{
+			throw new AbstractMethodException();
+		}
+
+		[Abstract]
+		protected function doMakeFriendsRequest(userId:String, request:FriendRequest, handler:IMakeFriendsRequestHandler):void
+		{
+			throw new AbstractMethodException();
+		}
+
+		protected function closeFullScreen():void
+		{
+			if (_stage.displayState != StageDisplayState.NORMAL) {
+				_stage.displayState = StageDisplayState.NORMAL
+			}
+		}
+
 		private function pushCall(method:Function, args:Array):void
 		{
 			abortIfDestroyed();
@@ -179,7 +238,5 @@ package org.shypl.sna
 		{
 			executeCall();
 		}
-
-
 	}
 }

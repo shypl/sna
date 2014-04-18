@@ -1,6 +1,6 @@
 <project name="Social Network Adapter">
 
-	<target name="build-php">
+	<target name="build php">
 		<delete file="bin/shypl-sna.phar"/>
 		<exec executable="phar">
 			<arg value="pack"/>
@@ -12,16 +12,18 @@
 		</exec>
 	</target>
 
-	<target name="build-java">
+	<target name="build java">
 		<mkdir dir="tmp"/>
 		<javac srcdir="java/src" destdir="tmp"/>
 		<jar destfile="bin/shypl-sna.jar" basedir="tmp"/>
 		<delete dir="tmp"/>
 	</target>
 
-	<target name="build-flash">
+	<target name="build flash">
 		<property environment="env"/>
 		<property name="FLEX_HOME" value="${env.FLEX_HOME}"/>
+
+		<flash-js target="vk"/>
 
 		<java jar="${FLEX_HOME}/lib/compc.jar" dir="${basedir}" fork="true" failonerror="true">
 			<jvmarg value="-Dfile.encoding=UTF-8"/>
@@ -32,5 +34,18 @@
 			<arg value="-output=bin/shypl-sna.swc"/>
 		</java>
 	</target>
+
+	<macrodef name="flash-js">
+		<attribute name="target"/>
+		<sequential>
+			<java jar="build/closure-compiler.jar" dir="${basedir}" fork="true" failonerror="true">
+				<jvmarg value="-Dfile.encoding=UTF-8"/>
+				<arg value="--js"/>
+				<arg value="flash/src/org/shypl/sna/js/@{target}.js"/>
+				<arg value="--js_output_file"/>
+				<arg value="flash/src/org/shypl/sna/js/@{target}.min.js"/>
+			</java>
+		</sequential>
+	</macrodef>
 
 </project>

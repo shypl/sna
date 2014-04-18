@@ -1,5 +1,7 @@
 package org.shypl.sna
 {
+	import flash.display.Stage;
+
 	import org.shypl.common.util.IErrorHandler;
 
 	public class SocialNetwork
@@ -57,9 +59,9 @@ package org.shypl.sna
 			return _code;
 		}
 
-		internal function createAdapter(errorHandler:IErrorHandler, params:Object):SocialNetworkAdapter
+		internal function createAdapter(stage:Stage, errorHandler:IErrorHandler, params:Object):SocialNetworkAdapter
 		{
-			return new _adapterClass(this, errorHandler, params);
+			return new _adapterClass(stage, errorHandler, this, params);
 		}
 	}
 }

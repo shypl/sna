@@ -170,11 +170,16 @@ class AdapterVk extends SocialNetworkAdapter
 			case 'get_item_test':
 				$product = $handler->defineProduct($request->param('item'), $request->param('user_id'));
 				$response = array(
-					'item_id'   => $product->id(),
-					'title'     => $product->name(),
-					'price'     => $product->price(),
-					'photo_url' => $product->img()
+					'item_id' => $product->id(),
+					'title'   => $product->name(),
+					'price'   => $product->price()
 				);
+				if ($product->hasImage()) {
+					$response['photo_url'] = $product->image();
+				}
+				if ($product->hasExpiration()) {
+					$response['expiration'] = $product->expiration();
+				}
 				break;
 
 			case 'order_status_change':
