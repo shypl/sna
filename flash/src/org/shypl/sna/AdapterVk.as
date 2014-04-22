@@ -1,5 +1,4 @@
-package org.shypl.sna
-{
+package org.shypl.sna {
 	import flash.display.Stage;
 	import flash.external.ExternalInterface;
 
@@ -9,12 +8,10 @@ package org.shypl.sna
 	import org.shypl.common.util.StringUtils;
 	import org.shypl.sna.js.AdapterVkJs;
 
-	internal class AdapterVk extends SocialNetworkAdapter
-	{
+	internal class AdapterVk extends SocialNetworkAdapter {
 		private static const USER_FIELDS:String = "uid,first_name,last_name,photo_100,sex";
 
-		private static function createUser(data:Object):SocialNetworkUser
-		{
+		private static function createUser(data:Object):SocialNetworkUser {
 			try {
 				return new SocialNetworkUser(
 					data.uid,
@@ -31,8 +28,7 @@ package org.shypl.sna
 			return null;
 		}
 
-		private static function createUserList(data:Array):Vector.<SocialNetworkUser>
-		{
+		private static function createUserList(data:Array):Vector.<SocialNetworkUser> {
 			const list:Vector.<SocialNetworkUser> = new Vector.<SocialNetworkUser>(data.length, true);
 			for (var i:int = 0; i < data.length; i++) {
 				list[i] = createUser(data[i]);
@@ -45,41 +41,34 @@ package org.shypl.sna
 		private var _testMode:Boolean;
 		private var _handlerMakePayment:IMakePaymentHandler;
 
-		public function AdapterVk(stage:Stage, errorHandler:IErrorHandler, params:Object)
-		{
+		public function AdapterVk(stage:Stage, errorHandler:IErrorHandler, params:Object) {
 			super(stage, errorHandler, SocialNetworkManager.VK, params, LogManager.getByClass(AdapterVk));
 			_testMode = params.tm;
 			init0();
 		}
 
-		override protected function doDestroy():void
-		{
+		override protected function doDestroy():void {
 			super.doDestroy();
 		}
 
-		override protected function doGetUsers(ids:Vector.<String>, handler:IUserListHandler):void
-		{
+		override protected function doGetUsers(ids:Vector.<String>, handler:IUserListHandler):void {
 			callApi("users.get", {uids: ids.join(","), fields: USER_FIELDS}, handler);
 		}
 
-		override protected function doGetFriends(limit:int, offset:int, handler:IUserListHandler):void
-		{
+		override protected function doGetFriends(limit:int, offset:int, handler:IUserListHandler):void {
 			callApi("friends.get", {fields: USER_FIELDS, count: limit, offset: offset}, handler);
 		}
 
-		override protected function doGetAppFriendIds(handler:IUserIdListHandler):void
-		{
+		override protected function doGetAppFriendIds(handler:IUserIdListHandler):void {
 			callApi("friends.getAppUsers", null, handler);
 		}
 
-		override protected function doInviteFriends():void
-		{
+		override protected function doInviteFriends():void {
 			closeFullScreen();
 			callClient("showInviteBox");
 		}
 
-		override protected function doMakePayment(id:int, name:String, price:int, handler:IMakePaymentHandler):void
-		{
+		override protected function doMakePayment(id:int, name:String, price:int, handler:IMakePaymentHandler):void {
 			if (_handlerMakePayment) {
 				throw new IllegalStateException();
 			}
@@ -92,8 +81,7 @@ package org.shypl.sna
 			]);
 		}
 
-		private function callApi(method:String, params:Object, handler:Object):void
-		{
+		private function callApi(method:String, params:Object, handler:Object):void {
 			try {
 				const callbackId:int = registerCallbackHandler(handler);
 
@@ -114,8 +102,7 @@ package org.shypl.sna
 			}
 		}
 
-		private function callClient(method:String, params:Array = null):void
-		{
+		private function callClient(method:String, params:Array = null):void {
 			try {
 				if (params == null) {
 					params = [];
@@ -127,8 +114,7 @@ package org.shypl.sna
 			}
 		}
 
-		private function handleApiCallback(callbackId:int, data:Object):void
-		{
+		private function handleApiCallback(callbackId:int, data:Object):void {
 			_logger.debug("Callback api [{}] {}", callbackId, data);
 
 			try {
@@ -153,8 +139,7 @@ package org.shypl.sna
 			}
 		}
 
-		private function handlePaymentCallback(success:Boolean, error:int):void
-		{
+		private function handlePaymentCallback(success:Boolean, error:int):void {
 			try {
 				if (!success && error != 0) {
 					_logger.warn("Payment error {}", error);
@@ -169,8 +154,7 @@ package org.shypl.sna
 			}
 		}
 
-		private function init0():void
-		{
+		private function init0():void {
 			_logger.info("Initialization start");
 			try {
 				ExternalInterface.addCallback("__sna_inited", init1);
@@ -183,8 +167,7 @@ package org.shypl.sna
 			}
 		}
 
-		private function init1():void
-		{
+		private function init1():void {
 			try {
 				_logger.info("Initialization complete");
 				completeInit();

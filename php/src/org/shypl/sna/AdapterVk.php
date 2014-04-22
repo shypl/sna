@@ -4,8 +4,7 @@ namespace org\shypl\sna;
 use org\shypl\common\app\HttpRequest;
 use org\shypl\common\app\HttpResponse;
 
-class AdapterVk extends SocialNetworkAdapter
-{
+class AdapterVk extends SocialNetworkAdapter {
 	const ID = 1;
 	const NAME = "vk";
 	/**
@@ -24,8 +23,7 @@ class AdapterVk extends SocialNetworkAdapter
 	/**
 	 * @param array $params
 	 */
-	public function __construct(array $params)
-	{
+	public function __construct(array $params) {
 		parent::__construct(self::ID, self::NAME, $params['secretKey']);
 
 		$this->apiId = $params['apiId'];
@@ -38,8 +36,7 @@ class AdapterVk extends SocialNetworkAdapter
 	 *
 	 * @return bool
 	 */
-	public function validateRequest(HttpRequest $request)
-	{
+	public function validateRequest(HttpRequest $request) {
 		if ($request->hasParam('sig')) {
 			$params = $request->params();
 			$sig = $params['sig'];
@@ -56,8 +53,7 @@ class AdapterVk extends SocialNetworkAdapter
 	 *
 	 * @return bool
 	 */
-	public function authRequest(HttpRequest $request)
-	{
+	public function authRequest(HttpRequest $request) {
 		return $request->hasParam('auth_key')
 		&& $request->hasParam('viewer_id')
 		&& $request->param('auth_key')
@@ -69,8 +65,7 @@ class AdapterVk extends SocialNetworkAdapter
 	 *
 	 * @return string
 	 */
-	public function defineRequestUserId(HttpRequest $request)
-	{
+	public function defineRequestUserId(HttpRequest $request) {
 		return $request->param('viewer_id');
 	}
 
@@ -79,8 +74,7 @@ class AdapterVk extends SocialNetworkAdapter
 	 *
 	 * @return HttpResponse
 	 */
-	public function createPaymentRequestErrorResponse(PaymentRequestException $e)
-	{
+	public function createPaymentRequestErrorResponse(PaymentRequestException $e) {
 		static $codes
 		= array(
 			PaymentRequestException::BAD_SIGNATURE     => 10,
@@ -103,8 +97,7 @@ class AdapterVk extends SocialNetworkAdapter
 	 *
 	 * @return string
 	 */
-	protected function requestApi($method, array $params)
-	{
+	protected function requestApi($method, array $params) {
 		$params['method'] = $method;
 		$params['api_id'] = $this->apiId;
 		$params['format'] = 'JSON';
@@ -124,8 +117,7 @@ class AdapterVk extends SocialNetworkAdapter
 	 *
 	 * @return array
 	 */
-	protected function receiveApiResponse($data)
-	{
+	protected function receiveApiResponse($data) {
 		$data = json_decode($data, true);
 
 		if (is_array($data)) {
@@ -146,8 +138,7 @@ class AdapterVk extends SocialNetworkAdapter
 	 *
 	 * @return string
 	 */
-	protected function defineFlashParams0(HttpRequest $request)
-	{
+	protected function defineFlashParams0(HttpRequest $request) {
 		$str = 'acn=' . $request->param('lc_name');
 
 		if ($this->testMode) {
@@ -163,8 +154,7 @@ class AdapterVk extends SocialNetworkAdapter
 	 *
 	 * @return HttpResponse
 	 */
-	protected function processPaymentRequest0(HttpRequest $request, IPaymentRequestHandler $handler)
-	{
+	protected function processPaymentRequest0(HttpRequest $request, IPaymentRequestHandler $handler) {
 		switch ($request->param('notification_type')) {
 			case 'get_item':
 			case 'get_item_test':

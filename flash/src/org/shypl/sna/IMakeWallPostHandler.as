@@ -1,7 +1,5 @@
-package org.shypl.sna
-{
-	public interface IMakeWallPostHandler
-	{
+package org.shypl.sna {
+	public interface IMakeWallPostHandler {
 		function handleMakeWallPost(success:Boolean):void;
 	}
 }

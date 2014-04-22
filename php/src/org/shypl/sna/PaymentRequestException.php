@@ -1,8 +1,7 @@
 <?php
 namespace org\shypl\sna;
 
-class PaymentRequestException extends \Exception
-{
+class PaymentRequestException extends \Exception {
 	const BAD_SIGNATURE = 1;
 	const BAD_PARAMS = 2;
 	const USER_NOT_FOUND = 3;
@@ -14,8 +13,7 @@ class PaymentRequestException extends \Exception
 	 * @param int        $code
 	 * @param \Exception $previous
 	 */
-	public function __construct($code, \Exception $previous = null)
-	{
+	public function __construct($code, \Exception $previous = null) {
 
 		switch ($code) {
 			case self::BAD_SIGNATURE:

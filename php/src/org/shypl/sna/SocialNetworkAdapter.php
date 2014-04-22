@@ -5,15 +5,13 @@ use InvalidArgumentException;
 use org\shypl\common\app\HttpRequest;
 use org\shypl\common\app\HttpResponse;
 
-abstract class SocialNetworkAdapter
-{
+abstract class SocialNetworkAdapter {
 	/**
 	 * @param string $name
 	 *
 	 * @return bool
 	 */
-	static public function exists($name)
-	{
+	static public function exists($name) {
 		switch (strtolower($name)) {
 			case AdapterVk::NAME:
 			case AdapterMm::NAME:
@@ -31,8 +29,7 @@ abstract class SocialNetworkAdapter
 	 * @throws \InvalidArgumentException
 	 * @return SocialNetworkAdapter
 	 */
-	static public function factory($name, array $params)
-	{
+	static public function factory($name, array $params) {
 		switch (strtolower($name)) {
 			case AdapterVk::NAME:
 				return new AdapterVk($params);
@@ -67,8 +64,7 @@ abstract class SocialNetworkAdapter
 	 * @param string $name
 	 * @param string $signatureSalt
 	 */
-	protected function __construct($id, $name, $signatureSalt)
-	{
+	protected function __construct($id, $name, $signatureSalt) {
 		$this->id = $id;
 		$this->name = $name;
 		$this->index = $id - 1;
@@ -78,24 +74,21 @@ abstract class SocialNetworkAdapter
 	/**
 	 * @return int
 	 */
-	public function id()
-	{
+	public function id() {
 		return $this->id;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function name()
-	{
+	public function name() {
 		return $this->name;
 	}
 
 	/**
 	 * @return int
 	 */
-	public function index()
-	{
+	public function index() {
 		return $this->index;
 	}
 
@@ -104,8 +97,7 @@ abstract class SocialNetworkAdapter
 	 *
 	 * @return RequestWrap
 	 */
-	public function createRequestWrap(HttpRequest $request)
-	{
+	public function createRequestWrap(HttpRequest $request) {
 		return new RequestWrap($this, $request);
 	}
 
@@ -115,8 +107,7 @@ abstract class SocialNetworkAdapter
 	 *
 	 * @return mixed
 	 */
-	public function callApi($method, array $params = array())
-	{
+	public function callApi($method, array $params = array()) {
 		return $this->receiveApiResponse($this->requestApi($method, $params));
 	}
 
@@ -141,8 +132,7 @@ abstract class SocialNetworkAdapter
 	 *
 	 * @return HttpResponse
 	 */
-	public function processPaymentRequest(HttpRequest $request, IPaymentRequestHandler $handler)
-	{
+	public function processPaymentRequest(HttpRequest $request, IPaymentRequestHandler $handler) {
 		try {
 
 			if (!$this->validateRequest($request)) {
@@ -181,8 +171,7 @@ abstract class SocialNetworkAdapter
 	 *
 	 * @return string
 	 */
-	public function defineFlashParams(HttpRequest $request)
-	{
+	public function defineFlashParams(HttpRequest $request) {
 		return $this->name . ';'
 		. 'u=' . $this->defineRequestUserId($request) . ';'
 		. $this->defineFlashParams0($request);
@@ -221,8 +210,7 @@ abstract class SocialNetworkAdapter
 	 *
 	 * @return string
 	 */
-	protected function obtainSignature(array $params)
-	{
+	protected function obtainSignature(array $params) {
 		ksort($params);
 
 		$query = '';
@@ -239,8 +227,7 @@ abstract class SocialNetworkAdapter
 	 *
 	 * @return string
 	 */
-	protected function sendPostRequest($url, array $params)
-	{
+	protected function sendPostRequest($url, array $params) {
 		$context = stream_context_create(array('http' => array(
 			'method'        => 'POST',
 			'timeout'       => 30,

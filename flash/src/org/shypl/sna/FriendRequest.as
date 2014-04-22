@@ -1,6 +1,4 @@
-package org.shypl.sna
-{
-	public class FriendRequest
-	{
+package org.shypl.sna {
+	public class FriendRequest {
 	}
 }

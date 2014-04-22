@@ -1,8 +1,7 @@
 <?php
 namespace org\shypl\sna;
 
-class PaymentProduct
-{
+class PaymentProduct {
 	/**
 	 * @var string
 	 */
@@ -31,8 +30,7 @@ class PaymentProduct
 	 * @param string $image
 	 * @param int    $expiration
 	 */
-	public function __construct($id, $name, $price, $image = null, $expiration = 0)
-	{
+	public function __construct($id, $name, $price, $image = null, $expiration = 0) {
 		$this->id = $id;
 		$this->name = $name;
 		$this->price = $price;
@@ -43,56 +41,49 @@ class PaymentProduct
 	/**
 	 * @return string
 	 */
-	public function id()
-	{
+	public function id() {
 		return $this->id;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function name()
-	{
+	public function name() {
 		return $this->name;
 	}
 
 	/**
 	 * @return int
 	 */
-	public function price()
-	{
+	public function price() {
 		return $this->price;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function image()
-	{
+	public function image() {
 		return $this->image;
 	}
 
 	/**
 	 * @return int
 	 */
-	public function expiration()
-	{
+	public function expiration() {
 		return $this->expiration;
 	}
 
 	/**
 	 * @return bool
 	 */
-	public function hasImage()
-	{
+	public function hasImage() {
 		return !!$this->image;
 	}
 
 	/**
 	 * @return bool
 	 */
-	public function hasExpiration()
-	{
+	public function hasExpiration() {
 		return $this->expiration > 0;
 	}
 }

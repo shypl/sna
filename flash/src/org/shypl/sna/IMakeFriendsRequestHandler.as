@@ -1,7 +1,5 @@
-package org.shypl.sna
-{
-	public interface IMakeFriendsRequestHandler
-	{
+package org.shypl.sna {
+	public interface IMakeFriendsRequestHandler {
 		function handleMakeFriendRequest():void;
 	}
 }

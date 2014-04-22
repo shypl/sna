@@ -4,8 +4,7 @@ namespace org\shypl\sna;
 use org\shypl\common\app\HttpRequest;
 use org\shypl\common\app\HttpResponse;
 
-class AdapterMm extends SocialNetworkAdapter
-{
+class AdapterMm extends SocialNetworkAdapter {
 	const ID = 2;
 	const NAME = "mm";
 
@@ -25,8 +24,7 @@ class AdapterMm extends SocialNetworkAdapter
 	/**
 	 * @param array $params
 	 */
-	public function __construct(array $params)
-	{
+	public function __construct(array $params) {
 		parent::__construct(self::ID, self::NAME, $params['secretKey']);
 
 		$this->appId = $params['appId'];
@@ -39,8 +37,7 @@ class AdapterMm extends SocialNetworkAdapter
 	 *
 	 * @return bool
 	 */
-	public function authRequest(HttpRequest $request)
-	{
+	public function authRequest(HttpRequest $request) {
 		return $this->validateRequest($request);
 	}
 
@@ -49,8 +46,7 @@ class AdapterMm extends SocialNetworkAdapter
 	 *
 	 * @return bool
 	 */
-	public function validateRequest(HttpRequest $request)
-	{
+	public function validateRequest(HttpRequest $request) {
 		if ($request->hasParam('sig')) {
 			$params = $request->params();
 			$sig = $params['sig'];
@@ -67,8 +63,7 @@ class AdapterMm extends SocialNetworkAdapter
 	 *
 	 * @return string
 	 */
-	public function defineRequestUserId(HttpRequest $request)
-	{
+	public function defineRequestUserId(HttpRequest $request) {
 		return $request->param('vid');
 	}
 
@@ -77,8 +72,7 @@ class AdapterMm extends SocialNetworkAdapter
 	 *
 	 * @return HttpResponse
 	 */
-	public function createPaymentRequestErrorResponse(PaymentRequestException $e)
-	{
+	public function createPaymentRequestErrorResponse(PaymentRequestException $e) {
 		switch ($e->getCode()) {
 			case PaymentRequestException::BAD_SIGNATURE:
 			case PaymentRequestException::BAD_PARAMS:
@@ -111,8 +105,7 @@ class AdapterMm extends SocialNetworkAdapter
 	 *
 	 * @return string
 	 */
-	protected function requestApi($method, array $params)
-	{
+	protected function requestApi($method, array $params) {
 		$params['method'] = $method;
 		$params['app_id'] = $this->appId;
 		$params['sig'] = $this->obtainSignature($params);
@@ -125,8 +118,7 @@ class AdapterMm extends SocialNetworkAdapter
 	 *
 	 * @return mixed
 	 */
-	protected function receiveApiResponse($data)
-	{
+	protected function receiveApiResponse($data) {
 		$data = json_decode($data, true);
 		if (is_array($data)) {
 			if (isset($data['error'])) {
@@ -142,8 +134,7 @@ class AdapterMm extends SocialNetworkAdapter
 	 *
 	 * @return string
 	 */
-	protected function defineFlashParams0(HttpRequest $request)
-	{
+	protected function defineFlashParams0(HttpRequest $request) {
 		return 'pk=' . $this->privateKey;
 	}
 
@@ -153,8 +144,7 @@ class AdapterMm extends SocialNetworkAdapter
 	 *
 	 * @return HttpResponse
 	 */
-	protected function processPaymentRequest0(HttpRequest $request, IPaymentRequestHandler $handler)
-	{
+	protected function processPaymentRequest0(HttpRequest $request, IPaymentRequestHandler $handler) {
 		$productPrice = (int)$request->param('mailiki_price');
 
 		if (!$productPrice) {

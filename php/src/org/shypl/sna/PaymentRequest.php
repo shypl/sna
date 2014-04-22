@@ -1,8 +1,7 @@
 <?php
 namespace org\shypl\sna;
 
-class PaymentRequest
-{
+class PaymentRequest {
 	/**
 	 * @var string
 	 */
@@ -26,8 +25,7 @@ class PaymentRequest
 	 * @param string $productId
 	 * @param int    $productPrice
 	 */
-	public function __construct($orderId, $userId, $productId, $productPrice)
-	{
+	public function __construct($orderId, $userId, $productId, $productPrice) {
 		$this->orderId = $orderId;
 		$this->userId = $userId;
 		$this->productId = $productId;
@@ -37,32 +35,28 @@ class PaymentRequest
 	/**
 	 * @return string
 	 */
-	public function orderId()
-	{
+	public function orderId() {
 		return $this->orderId;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function productId()
-	{
+	public function productId() {
 		return $this->productId;
 	}
 
 	/**
 	 * @return int
 	 */
-	public function productPrice()
-	{
+	public function productPrice() {
 		return $this->productPrice;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function userId()
-	{
+	public function userId() {
 		return $this->userId;
 	}
 }

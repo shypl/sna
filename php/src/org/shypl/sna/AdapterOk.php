@@ -4,8 +4,7 @@ namespace org\shypl\sna;
 use org\shypl\common\app\HttpRequest;
 use org\shypl\common\app\HttpResponse;
 
-class AdapterOk extends SocialNetworkAdapter
-{
+class AdapterOk extends SocialNetworkAdapter {
 	const ID = 3;
 	const NAME = "ok";
 	/**
@@ -20,8 +19,7 @@ class AdapterOk extends SocialNetworkAdapter
 	/**
 	 * @param array $params
 	 */
-	public function __construct(array $params)
-	{
+	public function __construct(array $params) {
 		parent::__construct(self::ID, self::NAME, $params['secretKey']);
 
 		$this->applicationKey = $params['applicationKey'];
@@ -33,8 +31,7 @@ class AdapterOk extends SocialNetworkAdapter
 	 *
 	 * @return bool
 	 */
-	public function validateRequest(HttpRequest $request)
-	{
+	public function validateRequest(HttpRequest $request) {
 		if ($request->hasParam('sig')) {
 			$params = $request->params();
 			$sig = $params['sig'];
@@ -51,8 +48,7 @@ class AdapterOk extends SocialNetworkAdapter
 	 *
 	 * @return bool
 	 */
-	public function authRequest(HttpRequest $request)
-	{
+	public function authRequest(HttpRequest $request) {
 		return $request->hasParam('auth_sig')
 		&& $request->hasParam('logged_user_id')
 		&& $request->hasParam('session_key')
@@ -65,8 +61,7 @@ class AdapterOk extends SocialNetworkAdapter
 	 *
 	 * @return string
 	 */
-	public function defineRequestUserId(HttpRequest $request)
-	{
+	public function defineRequestUserId(HttpRequest $request) {
 		return $request->param('logged_user_id');
 	}
 
@@ -75,8 +70,7 @@ class AdapterOk extends SocialNetworkAdapter
 	 *
 	 * @return HttpResponse
 	 */
-	public function createPaymentRequestErrorResponse(PaymentRequestException $e)
-	{
+	public function createPaymentRequestErrorResponse(PaymentRequestException $e) {
 		switch ($e->getCode()) {
 			case PaymentRequestException::BAD_SIGNATURE:
 				$code = 104;
@@ -125,8 +119,7 @@ class AdapterOk extends SocialNetworkAdapter
 	 *
 	 * @return string
 	 */
-	protected function requestApi($method, array $params)
-	{
+	protected function requestApi($method, array $params) {
 		$params['method'] = $method;
 		$params['application_key'] = $this->applicationKey;
 		$params['format'] = 'JSON';
@@ -140,8 +133,7 @@ class AdapterOk extends SocialNetworkAdapter
 	 *
 	 * @return mixed
 	 */
-	protected function receiveApiResponse($data)
-	{
+	protected function receiveApiResponse($data) {
 		$data = json_decode($data, true);
 		if (is_array($data)) {
 			if (isset($data['error_code'])) {
@@ -157,8 +149,7 @@ class AdapterOk extends SocialNetworkAdapter
 	 *
 	 * @return string
 	 */
-	protected function defineFlashParams0(HttpRequest $request)
-	{
+	protected function defineFlashParams0(HttpRequest $request) {
 		return 'ak=' . $this->applicationKey
 		. ';sk=' . $this->secretKey
 		. ';ac=' . $request->param("apiconnection")
@@ -173,8 +164,7 @@ class AdapterOk extends SocialNetworkAdapter
 	 *
 	 * @return HttpResponse
 	 */
-	protected function processPaymentRequest0(HttpRequest $request, IPaymentRequestHandler $handler)
-	{
+	protected function processPaymentRequest0(HttpRequest $request, IPaymentRequestHandler $handler) {
 		$paymentRequest = new PaymentRequest(
 			$request->param('transaction_id'),
 			$request->param('uid'),

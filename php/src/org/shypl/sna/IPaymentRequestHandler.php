@@ -1,8 +1,7 @@
 <?php
 namespace org\shypl\sna;
 
-interface IPaymentRequestHandler
-{
+interface IPaymentRequestHandler {
 	/**
 	 * @param string $productId
 	 * @param string $userId

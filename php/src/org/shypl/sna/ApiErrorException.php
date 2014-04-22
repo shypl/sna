@@ -1,6 +1,5 @@
 <?php
 namespace org\shypl\sna;
 
-class ApiErrorException extends \RuntimeException
-{
+class ApiErrorException extends \RuntimeException {
 }
