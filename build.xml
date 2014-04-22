@@ -45,6 +45,7 @@
 				<arg value="--js_output_file"/>
 				<arg value="flash/src/org/shypl/sna/js/@{target}.min.js"/>
 			</java>
+			<replaceregexp file="flash/src/org/shypl/sna/js/@{target}.min.js" flags="s" match=";$" replace="" />
 		</sequential>
 	</macrodef>
 
