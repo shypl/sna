@@ -9,7 +9,7 @@ package org.shypl.sna
 	{
 		public function AdapterMm(stage:Stage, errorHandler:IErrorHandler, params:Object)
 		{
-			super(stage, errorHandler, SocialNetwork.MM, params, LogManager.getByClass(AdapterMm));
+			super(stage, errorHandler, SocialNetworkManager.MM, params, LogManager.getByClass(AdapterMm));
 		}
 	}
 }

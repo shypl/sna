@@ -47,7 +47,7 @@ package org.shypl.sna
 
 		public function AdapterVk(stage:Stage, errorHandler:IErrorHandler, params:Object)
 		{
-			super(stage, errorHandler, SocialNetwork.VK, params, LogManager.getByClass(AdapterVk));
+			super(stage, errorHandler, SocialNetworkManager.VK, params, LogManager.getByClass(AdapterVk));
 			_testMode = params.tm;
 			init0();
 		}

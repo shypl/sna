@@ -31,7 +31,7 @@ package org.shypl.sna
 
 		public static function factory(stage:Stage, errorHandler:IErrorHandler, code:String, params:Object):SocialNetworkAdapter
 		{
-			return SocialNetwork.getByCode(code).createAdapter(stage, errorHandler, params);
+			return SocialNetworkManager.getByCode(code).createAdapter(stage, errorHandler, params);
 		}
 
 		protected var _stage:Stage;
