@@ -1,52 +1,70 @@
-<project name="Social Network Adapter">
+<project default="build">
 
-	<target name="build php">
-		<delete file="bin/shypl-sna.phar"/>
-		<exec executable="phar">
+	<taskdef classpath="build/shypl-ant-1.1.0.jar" resource="tasks.properties"/>
+
+	<target name="build" depends="build-cmp-php, build-cmp-flash"/>
+
+	<target name="build-cmp-flash">
+		<property environment="env"/>
+		<property name="FLEX_HOME" value="${env.FLEX_HOME}"/>
+		<property file="project.properties"/>
+
+		<compress-flash-js name="vk"/>
+		<compress-flash-js name="mm"/>
+		<compress-flash-js name="ok"/>
+
+		<java jar="${FLEX_HOME}/lib/compc.jar" fork="true" failonerror="true">
+			<jvmarg value="-Dfile.encoding=UTF-8"/>
+			<arg value="+flexlib=${FLEX_HOME}/frameworks"/>
+			<arg value="-source-path=flash/src"/>
+			<arg value="-output=bin/${project.artifact}-${project.version}.swc"/>
+			<arg value="-library-path+=flash/lib"/>
+			<arg value="-include-sources=flash/src"/>
+		</java>
+	</target>
+
+	<macrodef name="compress-flash-js">
+		<attribute name="name"/>
+		<sequential>
+			<java jar="build/closure-compiler.jar" fork="true" failonerror="true">
+				<jvmarg value="-Dfile.encoding=UTF-8"/>
+				<arg value="--js"/>
+				<arg value="flash/resources/@{name}.js"/>
+				<arg value="--js_output_file"/>
+				<arg value="flash/resources/@{name}.min.js"/>
+			</java>
+			<replaceregexp file="flash/resources/@{name}.min.js" flags="s" match=";$" replace="" />
+		</sequential>
+	</macrodef>
+
+	<target name="build-cmp-php">
+		<property file="project.properties"/>
+
+		<delete file="bin/${project.artifact}-${project.version}.phar"/>
+
+		<exec executable="phar" failonerror="true">
 			<arg value="pack"/>
 			<arg value="-s"/>
-			<arg value="php/build/stub.php"/>
+			<arg value="build/stub.php"/>
 			<arg value="-f"/>
-			<arg value="bin/shypl-sna.phar"/>
+			<arg value="bin/${project.artifact}-${project.version}.phar"/>
 			<arg value="php/src"/>
 		</exec>
 	</target>
 
-	<target name="build java">
-		<mkdir dir="tmp"/>
-		<javac srcdir="java/src" destdir="tmp"/>
-		<jar destfile="bin/shypl-sna.jar" basedir="tmp"/>
-		<delete dir="tmp"/>
+	<target name="build-version-major">
+		<next_project_version importance="major"/>
+		<antcall target="build"/>
 	</target>
 
-	<target name="build flash">
-		<property environment="env"/>
-		<property name="FLEX_HOME" value="${env.FLEX_HOME}"/>
-
-		<flash-js target="vk"/>
-
-		<java jar="${FLEX_HOME}/lib/compc.jar" dir="${basedir}" fork="true" failonerror="true">
-			<jvmarg value="-Dfile.encoding=UTF-8"/>
-			<arg value="+flexlib=${FLEX_HOME}/frameworks"/>
-			<arg value="-source-path+=flash/src"/>
-			<arg value="-include-sources=flash/src"/>
-			<arg value="-library-path+=flash/lib"/>
-			<arg value="-output=bin/shypl-sna.swc"/>
-		</java>
+	<target name="build-version-minor">
+		<next_project_version importance="minor"/>
+		<antcall target="build"/>
 	</target>
 
-	<macrodef name="flash-js">
-		<attribute name="target"/>
-		<sequential>
-			<java jar="build/closure-compiler.jar" dir="${basedir}" fork="true" failonerror="true">
-				<jvmarg value="-Dfile.encoding=UTF-8"/>
-				<arg value="--js"/>
-				<arg value="flash/src/org/shypl/sna/js/@{target}.js"/>
-				<arg value="--js_output_file"/>
-				<arg value="flash/src/org/shypl/sna/js/@{target}.min.js"/>
-			</java>
-			<replaceregexp file="flash/src/org/shypl/sna/js/@{target}.min.js" flags="s" match=";$" replace="" />
-		</sequential>
-	</macrodef>
+	<target name="build-version-patch">
+		<next_project_version importance="patch"/>
+		<antcall target="build"/>
+	</target>
 
 </project>

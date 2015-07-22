@@ -2,25 +2,10 @@
 namespace org\shypl\sna;
 
 class PaymentProduct {
-	/**
-	 * @var string
-	 */
 	private $id;
-	/**
-	 * @var string
-	 */
 	private $name;
-	/**
-	 * @var int
-	 */
 	private $price;
-	/**
-	 * @var string
-	 */
 	private $image;
-	/**
-	 * @var int
-	 */
 	private $expiration;
 
 	/**
@@ -33,43 +18,43 @@ class PaymentProduct {
 	public function __construct($id, $name, $price, $image = null, $expiration = 0) {
 		$this->id = $id;
 		$this->name = $name;
-		$this->price = $price;
+		$this->price = (int)$price;
 		$this->image = $image;
-		$this->expiration = $expiration;
+		$this->expiration = (int)$expiration;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function id() {
+	public function getId() {
 		return $this->id;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function name() {
+	public function getName() {
 		return $this->name;
 	}
 
 	/**
 	 * @return int
 	 */
-	public function price() {
+	public function getPrice() {
 		return $this->price;
 	}
 
 	/**
-	 * @return string
+	 * @return null|string
 	 */
-	public function image() {
+	public function getImage() {
 		return $this->image;
 	}
 
 	/**
 	 * @return int
 	 */
-	public function expiration() {
+	public function getExpiration() {
 		return $this->expiration;
 	}
 

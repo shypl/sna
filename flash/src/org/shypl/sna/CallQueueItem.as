@@ -1,16 +1,16 @@
 package org.shypl.sna {
 	internal class CallQueueItem {
-		private var _method:Function;
+		private var _closure:Function;
 		private var _args:Array;
 
-		public function CallQueueItem(method:Function, args:Array) {
-			_method = method;
+		public function CallQueueItem(closure:Function, args:Array) {
+			_closure = closure;
 			_args = args;
 		}
 
 		public function execute():void {
-			_method.apply(null, _args);
-			_method = null;
+			_closure.apply(null, _args);
+			_closure = null;
 			_args = null;
 		}
 	}

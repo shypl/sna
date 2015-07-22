@@ -1,2 +1,0 @@
-Social Network Adapter
-===

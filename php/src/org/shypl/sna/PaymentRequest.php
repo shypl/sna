@@ -2,21 +2,9 @@
 namespace org\shypl\sna;
 
 class PaymentRequest {
-	/**
-	 * @var string
-	 */
 	private $orderId;
-	/**
-	 * @var string
-	 */
 	private $userId;
-	/**
-	 * @var string
-	 */
 	private $productId;
-	/**
-	 * @var int
-	 */
 	private $productPrice;
 
 	/**
@@ -30,33 +18,37 @@ class PaymentRequest {
 		$this->userId = $userId;
 		$this->productId = $productId;
 		$this->productPrice = (int)$productPrice;
+
+		if (!$this->orderId || !$this->userId || !$this->productId || !$this->productPrice) {
+			throw new PaymentException(PaymentException::BAD_REQUEST_PARAMETERS);
+		}
 	}
 
 	/**
 	 * @return string
 	 */
-	public function orderId() {
+	public function getOrderId() {
 		return $this->orderId;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function productId() {
+	public function getUserId() {
+		return $this->userId;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getProductId() {
 		return $this->productId;
 	}
 
 	/**
 	 * @return int
 	 */
-	public function productPrice() {
+	public function getProductPrice() {
 		return $this->productPrice;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function userId() {
-		return $this->userId;
 	}
 }
