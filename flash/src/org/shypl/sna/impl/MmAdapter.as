@@ -3,9 +3,11 @@ package org.shypl.sna.impl {
 	import flash.external.ExternalInterface;
 
 	import org.shypl.common.lang.IllegalStateException;
+	import org.shypl.common.logging.LogManager;
+	import org.shypl.common.logging.Logger;
 	import org.shypl.common.util.CollectionUtils;
 	import org.shypl.common.util.NumberUtils;
-	import org.shypl.sna.Adapter;
+	import org.shypl.sna.AbstractAdapter;
 	import org.shypl.sna.FriendRequest;
 	import org.shypl.sna.MakeFriendsRequestHandler;
 	import org.shypl.sna.MakePaymentHandler;
@@ -17,7 +19,9 @@ package org.shypl.sna.impl {
 	import org.shypl.sna.SnaException;
 	import org.shypl.sna.WallPost;
 
-	public class MmAdapter extends Adapter {
+	public class MmAdapter extends AbstractAdapter {
+		private static const logger:Logger = LogManager.getLogger(MmAdapter);
+
 		private static function createUser(data:Object):SnUser {
 			try {
 				return new SnUser(
@@ -42,27 +46,21 @@ package org.shypl.sna.impl {
 			return list;
 		}
 
-		private var _privateKey:String;
 		private var _handlerMakePayment:MakePaymentHandler;
 		private var _handlerMakeFriendsRequest:MakeFriendsRequestHandler;
 		private var _handlerMakeWallPost:MakeWallPostHandler;
 		private var _friendsRequestUserId:String;
 
-		public function MmAdapter(stage:Stage, parameters:Object) {
-			super(stage, 2, parameters, 200);
-			_privateKey = parameters.pk;
-		}
-
-		override public function getCurrencyLabelForNumber(number:Number):String {
-			return NumberUtils.defineWordDeclinationRu(number, "мелик", "мейлика", "мейликов");
-		}
-
-		override protected function init():void {
+		public function MmAdapter(stage:Stage, sessionUserId:String) {
+			super(2, 200, stage, sessionUserId);
 			ExternalInterface.addCallback("__sna_api", handleApiCallback);
 			ExternalInterface.addCallback("__sna_payment", handlePaymentCallback);
 			ExternalInterface.addCallback("__sna_friendsRequest", handleFriendsRequestCallback);
 			ExternalInterface.addCallback("__sna_wallPost", handleWallPostCallback);
-			ExternalInterface.call(new MmAdapterJs().toString(), ExternalInterface.objectID, _privateKey);
+		}
+
+		override public function getCurrencyLabelForNumber(number:Number):String {
+			return NumberUtils.defineWordDeclinationRu(number, "мелик", "мейлика", "мейликов");
 		}
 
 		override protected function doGetUsers(ids:Vector.<String>, receiver:SnUserListReceiver):void {
@@ -126,7 +124,7 @@ package org.shypl.sna.impl {
 				ExternalInterface.call("__sna_api", method, params, callbackId);
 			}
 			catch (e:Error) {
-				catchException(new SnaException("Error on call api", e));
+				throw new SnaException("Error on call api", e);
 			}
 		}
 
@@ -148,7 +146,7 @@ package org.shypl.sna.impl {
 				}
 			}
 			catch (e:Error) {
-				catchException(new SnaException("Error on handle api callback", e));
+				throw new SnaException("Error on handle api callback", e);
 			}
 		}
 
@@ -162,7 +160,7 @@ package org.shypl.sna.impl {
 				}
 			}
 			catch (e:Error) {
-				catchException(new SnaException("Error on handle payment", e));
+				throw new SnaException("Error on handle payment", e);
 			}
 		}
 
@@ -195,7 +193,7 @@ package org.shypl.sna.impl {
 				}
 			}
 			catch (e:Error) {
-				catchException(new SnaException("Error on handle payment", e));
+				throw new SnaException("Error on handle payment", e);
 			}
 		}
 	}

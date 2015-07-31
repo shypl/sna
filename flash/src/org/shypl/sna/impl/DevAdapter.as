@@ -1,6 +1,4 @@
 package org.shypl.sna.impl {
-	import flash.display.Stage;
-
 	import org.shypl.common.lang.Enum;
 	import org.shypl.common.util.NumberUtils;
 	import org.shypl.sna.Adapter;
@@ -12,22 +10,33 @@ package org.shypl.sna.impl {
 	import org.shypl.sna.SnUserGender;
 	import org.shypl.sna.SnUserIdListReceiver;
 	import org.shypl.sna.SnUserListReceiver;
+	import org.shypl.sna.SnUserReceiver;
 	import org.shypl.sna.WallPost;
 
-	public class DevAdapter extends Adapter {
-		public function DevAdapter(stage:Stage, parameters:Object) {
-			super(stage, 0, parameters, 100);
+	public class DevAdapter implements Adapter {
+		private var _sessionUserId:String;
+
+		public function DevAdapter(sessionUserId:String) {
+			_sessionUserId = sessionUserId;
 		}
 
-		override public function getCurrencyLabelForNumber(number:Number):String {
-			return NumberUtils.defineWordDeclinationRu(number, "монета", "монеты", "монет");
+		public function get networkId():int {
+			return 0;
 		}
 
-		override protected function init():void {
+		public function get sessionUserId():String {
+			return _sessionUserId;
 		}
 
-		[Abstract]
-		override protected function doGetUsers(ids:Vector.<String>, receiver:SnUserListReceiver):void {
+		public function getSessionUser(receiver:SnUserReceiver):void {
+			new SnUser(_sessionUserId, "User-" + _sessionUserId, "Developer", null, SnUserGender.MALE);
+		}
+
+		public function getUser(id:String, receiver:SnUserReceiver):void {
+			receiver.receiverSnUser(new SnUser(id, "User-" + id, "Developer", null, SnUserGender.MALE));
+		}
+
+		public function getUsers(ids:Vector.<String>, receiver:SnUserListReceiver):void {
 			var list:Vector.<SnUser> = new Vector.<SnUser>(ids.length, true);
 			for (var i:int = 0; i < ids.length; i++) {
 				var id:String = ids[i];
@@ -36,8 +45,7 @@ package org.shypl.sna.impl {
 			receiver.receiverSnUserList(list);
 		}
 
-		[Abstract]
-		override protected function doGetFriends(limit:int, offset:int, receiver:SnUserListReceiver):void {
+		public function getFriends(limit:int, offset:int, receiver:SnUserListReceiver):void {
 			var list:Vector.<SnUser> = new Vector.<SnUser>(limit, true);
 			for (var i:int = 0; i < limit; i++) {
 				var id:String = String(offset + i + 1);
@@ -46,8 +54,7 @@ package org.shypl.sna.impl {
 			receiver.receiverSnUserList(list);
 		}
 
-		[Abstract]
-		override protected function doGetAppFriendIds(receiver:SnUserIdListReceiver):void {
+		public function getAppFriendIds(receiver:SnUserIdListReceiver):void {
 			var list:Vector.<String> = new Vector.<String>(10, true);
 			for (var i:int = 0; i < list.length; i++) {
 				list[i] = String(i + 1);
@@ -55,27 +62,23 @@ package org.shypl.sna.impl {
 			receiver.receiverSnUserIdList(list);
 		}
 
-		[Abstract]
-		override protected function doInviteFriends():void {
-			closeFullScreen();
+		public function inviteFriends():void {
 		}
 
-		[Abstract]
-		override protected function doMakePayment(id:int, name:String, price:int, handler:MakePaymentHandler):void {
-			closeFullScreen();
+		public function makePayment(id:int, name:String, price:int, handler:MakePaymentHandler):void {
 			handler.handleMakePaymentResult(false);
 		}
 
-		[Abstract]
-		override protected function doMakeWallPost(post:WallPost, handler:MakeWallPostHandler):void {
-			closeFullScreen();
+		public function makeWallPost(post:WallPost, handler:MakeWallPostHandler):void {
 			handler.handleMakeWallPostResult(false);
 		}
 
-		[Abstract]
-		override protected function doMakeFriendsRequest(userId:String, request:FriendRequest, handler:MakeFriendsRequestHandler):void {
-			closeFullScreen();
+		public function makeFriendsRequest(userId:String, request:FriendRequest, handler:MakeFriendsRequestHandler):void {
 			handler.handleMakeFriendRequestResult(false);
+		}
+
+		public function getCurrencyLabelForNumber(number:Number):String {
+			return NumberUtils.defineWordDeclinationRu(number, "монета", "монеты", "монет");
 		}
 	}
 }

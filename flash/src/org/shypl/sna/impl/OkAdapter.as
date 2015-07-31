@@ -3,7 +3,10 @@ package org.shypl.sna.impl {
 	import flash.external.ExternalInterface;
 
 	import org.shypl.common.lang.IllegalStateException;
+	import org.shypl.common.logging.LogManager;
+	import org.shypl.common.logging.Logger;
 	import org.shypl.common.util.CollectionUtils;
+	import org.shypl.sna.AbstractAdapter;
 	import org.shypl.sna.Adapter;
 	import org.shypl.sna.FriendRequest;
 	import org.shypl.sna.MakeFriendsRequestHandler;
@@ -16,7 +19,8 @@ package org.shypl.sna.impl {
 	import org.shypl.sna.SnaException;
 	import org.shypl.sna.WallPost;
 
-	public class OkAdapter extends Adapter {
+	public class OkAdapter extends AbstractAdapter {
+		private static const logger:Logger = LogManager.getLogger(OkAdapter);
 		private static const USER_FIELDS:String = "uid,first_name,last_name,pic128x128,gender";
 
 		private static function createUser(data:Object):SnUser {
@@ -49,21 +53,17 @@ package org.shypl.sna.impl {
 		private var _handlerMakeWallPost:MakeWallPostHandler;
 		private var _friendsRequestUserId:String;
 
-		public function OkAdapter(stage:Stage, parameters:Object) {
-			super(stage, 3, parameters, 100);
-			init();
-		}
+		public function OkAdapter(stage:Stage, sessionUserId:String) {
+			super(3, 100, stage, sessionUserId);
 
-		override public function getCurrencyLabelForNumber(number:Number):String {
-			return "ок";
-		}
-
-		override protected function init():void {
 			ExternalInterface.addCallback("__sna_api", handleApiCallback);
 			ExternalInterface.addCallback("__sna_payment", handlePaymentCallback);
 			ExternalInterface.addCallback("__sna_friendsRequest", handleFriendsRequestCallback);
 			ExternalInterface.addCallback("__sna_makeWallPost", handleWallPostCallback);
-			ExternalInterface.call(new OkAdapterJs().toString(), ExternalInterface.objectID);
+		}
+
+		override public function getCurrencyLabelForNumber(number:Number):String {
+			return "ок";
 		}
 
 		override protected function doGetUsers(ids:Vector.<String>, receiver:SnUserListReceiver):void {
@@ -134,7 +134,7 @@ package org.shypl.sna.impl {
 				ExternalInterface.call("__sna_api", method, params, callbackId);
 			}
 			catch (e:Error) {
-				catchException(new SnaException("Error on call api", e));
+				throw new SnaException("Error on call api", e);
 			}
 		}
 
@@ -153,7 +153,7 @@ package org.shypl.sna.impl {
 				}
 			}
 			catch (e:Error) {
-				catchException(new SnaException("Error on handle api callback", e));
+				throw new SnaException("Error on handle api callback", e);
 			}
 		}
 
@@ -166,7 +166,7 @@ package org.shypl.sna.impl {
 				}
 			}
 			catch (e:Error) {
-				catchException(new SnaException("Error on handle payment", e));
+				throw new SnaException("Error on handle payment", e);
 			}
 		}
 
@@ -204,7 +204,7 @@ package org.shypl.sna.impl {
 				}
 			}
 			catch (e:Error) {
-				catchException(new SnaException("Error on handle payment", e));
+				throw new SnaException("Error on handle payment", e);
 			}
 		}
 

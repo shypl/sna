@@ -3,9 +3,11 @@ package org.shypl.sna.impl {
 	import flash.external.ExternalInterface;
 
 	import org.shypl.common.lang.IllegalStateException;
+	import org.shypl.common.logging.LogManager;
+	import org.shypl.common.logging.Logger;
 	import org.shypl.common.util.CollectionUtils;
 	import org.shypl.common.util.NumberUtils;
-	import org.shypl.sna.Adapter;
+	import org.shypl.sna.AbstractAdapter;
 	import org.shypl.sna.FriendRequest;
 	import org.shypl.sna.MakeFriendsRequestHandler;
 	import org.shypl.sna.MakePaymentHandler;
@@ -17,7 +19,9 @@ package org.shypl.sna.impl {
 	import org.shypl.sna.SnaException;
 	import org.shypl.sna.WallPost;
 
-	public class VkAdapter extends Adapter {
+	public class VkAdapter extends AbstractAdapter {
+		private static const logger:Logger = LogManager.getLogger(VkAdapter);
+
 		private static const USER_FIELDS:String = "uid,first_name,last_name,photo_100,sex";
 
 		private static function createUser(data:Object):SnUser {
@@ -48,19 +52,16 @@ package org.shypl.sna.impl {
 		private var _makePaymentHandler:MakePaymentHandler;
 		private var _makeFriendsRequestHandler:MakeFriendsRequestHandler;
 
-		public function VkAdapter(stage:Stage, parameters:Object) {
-			super(stage, 1, parameters, 1000);
-			_testMode = parameters.tm;
+		public function VkAdapter(stage:Stage, sessionUserId:String, testMode:Boolean) {
+			super(1, 1000, stage, sessionUserId);
+			_testMode = testMode;
+
+			ExternalInterface.addCallback("__sna_callbackApi", callbackApi);
+			ExternalInterface.addCallback("__sna_callbackClient", callbackClient);
 		}
 
 		override public function getCurrencyLabelForNumber(number:Number):String {
 			return NumberUtils.defineWordDeclinationRu(number, "голос", "голоса", "голосов");
-		}
-
-		override protected function init():void {
-			ExternalInterface.addCallback("__sna_callbackApi", callbackApi);
-			ExternalInterface.addCallback("__sna_callbackClient", callbackClient);
-			ExternalInterface.call(new VkAdapterJs().toString(), ExternalInterface.objectID);
 		}
 
 		override protected function doGetUsers(ids:Vector.<String>, receiver:SnUserListReceiver):void {
@@ -121,7 +122,7 @@ package org.shypl.sna.impl {
 				ExternalInterface.call("__sna_api", method, params, callbackId);
 			}
 			catch (e:Error) {
-				catchException(new SnaException("Error on call api", e));
+				throw new SnaException("Error on call api", e);
 			}
 		}
 
@@ -136,7 +137,7 @@ package org.shypl.sna.impl {
 				ExternalInterface.call("__sna_client", method, params);
 			}
 			catch (e:Error) {
-				catchException(new SnaException("Error on call client", e));
+				throw new SnaException("Error on call client", e);
 			}
 		}
 
@@ -169,7 +170,7 @@ package org.shypl.sna.impl {
 				}
 			}
 			catch (e:Error) {
-				catchException(new SnaException("Error on handle api callback", e));
+				throw new SnaException("Error on handle api callback", e);
 			}
 		}
 
@@ -194,7 +195,7 @@ package org.shypl.sna.impl {
 
 			}
 			catch (e:Error) {
-				catchException(new SnaException("Error on handle call callback", e));
+				throw new SnaException("Error on handle call callback", e);
 			}
 		}
 	}

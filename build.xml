@@ -18,7 +18,7 @@
 			<arg value="+flexlib=${FLEX_HOME}/frameworks"/>
 			<arg value="-source-path=flash/src"/>
 			<arg value="-output=bin/${project.artifact}-${project.version}.swc"/>
-			<arg value="-library-path+=flash/lib"/>
+			<arg value="-external-library-path+=flash/lib"/>
 			<arg value="-include-sources=flash/src"/>
 		</java>
 	</target>
