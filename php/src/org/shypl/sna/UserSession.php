@@ -32,7 +32,7 @@ class UserSession {
 	 * @return string
 	 */
 	public function getFlashAdapterParametersJavaScriptDeclaration() {
-		return '<script>window.SNA_FAP=' . json_encode($this->flashAdapterParameters) . ';</script>';
+		return '<script>function __sna_fap(){return ' . json_encode($this->flashAdapterParameters) . ';}</script>';
 
 	}
 

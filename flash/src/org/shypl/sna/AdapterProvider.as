@@ -11,7 +11,7 @@ package org.shypl.sna {
 	public final class AdapterProvider {
 		public static function providerFromEnvironment(receiver:AdapterReceiver, stage:Stage):void {
 			if (ExternalInterface.available) {
-				provider(receiver, stage, ExternalInterface.call("window.SNA_FAP"));
+				provider(receiver, stage, ExternalInterface.call("__sna_fap"));
 			}
 			else {
 				receiver.receiveAdapter(new DevAdapter('DEV-1'));
