@@ -29,7 +29,7 @@ package org.shypl.sna.impl {
 		}
 
 		public function getSessionUser(receiver:SnUserReceiver):void {
-			new SnUser(_sessionUserId, "User-" + _sessionUserId, "Developer", null, SnUserGender.MALE);
+			receiver.receiverSnUser(new SnUser(_sessionUserId, "User-" + _sessionUserId, "Developer", null, SnUserGender.MALE));
 		}
 
 		public function getUser(id:String, receiver:SnUserReceiver):void {

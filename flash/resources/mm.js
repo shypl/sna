@@ -37,7 +37,7 @@ function __sna(swfId, privateKey) {
 						}
 					});
 
-					swf.__sna_inited();
+					swf.__sna_completeInit();
 				});
 			}
 			else {

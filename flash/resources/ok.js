@@ -13,7 +13,7 @@ function __sna(swfId) {
 			if (!!window.FAPI) {
 				var requestParameters = FAPI.Util.getRequestParameters();
 				FAPI.init(requestParameters["api_server"], requestParameters["apiconnection"], function() {
-					swf.__sna_inited();
+					swf.__sna_completeInit();
 				}, function() {});
 			}
 			else {

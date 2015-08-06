@@ -22,7 +22,7 @@ function __sna(swfId) {
 					VK.addCallback("onRequestCancel", function() { swf.__sna_callbackClient("friendsRequest", false); });
 					VK.addCallback("onRequestFail", function() { swf.__sna_callbackClient("friendsRequest", false); });
 
-					swf.__sna_inited();
+					swf.__sna_completeInit();
 				});
 			}
 			else {
