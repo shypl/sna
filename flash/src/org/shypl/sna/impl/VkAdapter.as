@@ -7,6 +7,7 @@ package org.shypl.sna.impl {
 	import org.shypl.common.logging.Logger;
 	import org.shypl.common.util.CollectionUtils;
 	import org.shypl.common.util.NumberUtils;
+	import org.shypl.common.util.ObjectUtils;
 	import org.shypl.sna.AbstractAdapter;
 	import org.shypl.sna.FriendRequest;
 	import org.shypl.sna.MakeFriendsRequestHandler;
@@ -117,7 +118,9 @@ package org.shypl.sna.impl {
 					params.test_mode = true;
 				}
 
-				logger.debug("api > [{}] {}({})", callbackId, method, params);
+				if (logger.isDebugEnabled()) {
+					logger.debug("api > [{}] {}({})", callbackId, method, ObjectUtils.toString(params));
+				}
 
 				ExternalInterface.call("__sna_api", method, params, callbackId);
 			}
@@ -132,7 +135,9 @@ package org.shypl.sna.impl {
 					params = [];
 				}
 
-				logger.debug("client > {}({})", method, params);
+				if (logger.isDebugEnabled()) {
+					logger.debug("client > {}({})", method, ObjectUtils.toString(params));
+				}
 
 				ExternalInterface.call("__sna_client", method, params);
 			}
@@ -142,7 +147,9 @@ package org.shypl.sna.impl {
 		}
 
 		private function callbackApi(callbackId:int, data:Object):void {
-			logger.debug("api < [{}] {}", callbackId, data);
+			if (logger.isDebugEnabled()) {
+				logger.debug("api < [{}] {}", callbackId, ObjectUtils.toString(data));
+			}
 
 			try {
 				const handler:Object = getCallbackHandler(callbackId);
