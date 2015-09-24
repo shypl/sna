@@ -20,6 +20,6 @@ final class MmSocialNetwork extends SocialNetwork {
 	 * @return Adapter
 	 */
 	public function createAdapter(array $parameters) {
-		return new MmAdapter($this, $parameters);
+		return new MmAdapter($parameters);
 	}
 }

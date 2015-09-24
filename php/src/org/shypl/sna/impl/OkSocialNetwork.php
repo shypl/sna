@@ -20,5 +20,6 @@ final class OkSocialNetwork extends SocialNetwork {
 	 * @return Adapter
 	 */
 	public function createAdapter(array $parameters) {
-		return new OkAdapter($this, $parameters);
-	}}
+		return new OkAdapter($parameters);
+	}
+}

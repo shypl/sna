@@ -20,5 +20,6 @@ final class VkSocialNetwork extends SocialNetwork {
 	 * @return Adapter
 	 */
 	public function createAdapter(array $parameters) {
-		return new VkAdapter($this, $parameters);
-	}}
+		return new VkAdapter($parameters);
+	}
+}
