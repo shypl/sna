@@ -1,17 +1,27 @@
-<project default="build">
+<project name="shypl-sna">
 
 	<taskdef classpath="build/shypl-ant-1.1.2.jar" resource="tasks.properties"/>
 
-	<target name="build" depends="build-cmp-php, build-cmp-flash"/>
+	<target name="build" depends="build-php, build-flash, build-java"/>
 
-	<target name="build-cmp-flash">
+	<target name="build-java">
+		<property file="project.properties"/>
+		<mkdir dir="tmp"/>
+
+		<javac srcdir="java/src" destdir="tmp"  debug="true"/>
+		<jar destfile="bin/${project.artifact}-${project.version}.jar" basedir="tmp"/>
+
+		<delete dir="build/tmp/server"/>
+	</target>
+
+	<target name="build-flash">
 		<property environment="env"/>
 		<property name="FLEX_HOME" value="${env.FLEX_HOME}"/>
 		<property file="project.properties"/>
 
-		<compress-flash-js name="vk"/>
-		<compress-flash-js name="mm"/>
-		<compress-flash-js name="ok"/>
+		<build-flash-compress-js name="vk"/>
+		<build-flash-compress-js name="mm"/>
+		<build-flash-compress-js name="ok"/>
 
 		<java jar="${FLEX_HOME}/lib/compc.jar" fork="true" failonerror="true">
 			<jvmarg value="-Dfile.encoding=UTF-8"/>
@@ -23,7 +33,7 @@
 		</java>
 	</target>
 
-	<macrodef name="compress-flash-js">
+	<macrodef name="build-flash-compress-js">
 		<attribute name="name"/>
 		<sequential>
 			<java jar="build/closure-compiler.jar" fork="true" failonerror="true">
@@ -37,7 +47,7 @@
 		</sequential>
 	</macrodef>
 
-	<target name="build-cmp-php">
+	<target name="build-php">
 		<property file="project.properties"/>
 
 		<delete file="bin/${project.artifact}-${project.version}.phar"/>

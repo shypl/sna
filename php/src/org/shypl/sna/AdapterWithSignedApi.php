@@ -4,15 +4,15 @@ namespace org\shypl\sna;
 
 use org\shypl\common\net\HttpRequest;
 
-abstract class AdapterWithSignedApi extends Adapter {
+abstract class AdapterWithSignedApi extends AbstractAdapter {
 	private $signatureSalt;
 	private $signatureName;
 
 	/**
 	 * @param int    $networkId
 	 * @param string $apiUrl
-	 * @param string $signatureName
 	 * @param string $signatureSalt
+	 * @param string $signatureName
 	 */
 	public function __construct($networkId, $apiUrl, $signatureSalt, $signatureName = 'sig') {
 		parent::__construct($networkId, $apiUrl);

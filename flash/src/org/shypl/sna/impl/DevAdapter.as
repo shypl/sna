@@ -11,6 +11,8 @@ package org.shypl.sna.impl {
 	import org.shypl.sna.SnUserIdListReceiver;
 	import org.shypl.sna.SnUserListReceiver;
 	import org.shypl.sna.SnUserReceiver;
+	import org.shypl.sna.SocialNetwork;
+	import org.shypl.sna.SocialNetworkManager;
 	import org.shypl.sna.WallPost;
 
 	public class DevAdapter implements Adapter {
@@ -20,8 +22,8 @@ package org.shypl.sna.impl {
 			_sessionUserId = sessionUserId;
 		}
 
-		public function get networkId():int {
-			return 0;
+		public function get network():SocialNetwork {
+			return SocialNetworkManager.getNetworkById(0);
 		}
 
 		public function get sessionUserId():String {

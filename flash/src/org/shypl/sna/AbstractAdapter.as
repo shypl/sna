@@ -8,9 +8,9 @@ package org.shypl.sna {
 	import org.shypl.common.lang.AbstractMethodException;
 
 	public class AbstractAdapter implements Adapter {
-		private var _stage:Stage;
-		private var _networkId:int;
+		private var _network:SocialNetwork;
 		private var _sessionUserId:String;
+		private var _stage:Stage;
 
 		private var _getUsersLimit:int;
 		private var _callQueue:LinkedList = new LinkedList();
@@ -19,7 +19,7 @@ package org.shypl.sna {
 		private var _callbackHandlers:Object = {};
 
 		public function AbstractAdapter(networkId:int, getUsersLimit:int, stage:Stage, sessionUserId:String) {
-			_networkId = networkId;
+			_network = SocialNetworkManager.getNetworkById(networkId);
 			_getUsersLimit = getUsersLimit;
 			_stage = stage;
 			_sessionUserId = sessionUserId;
@@ -27,8 +27,8 @@ package org.shypl.sna {
 			_callTimer.addEventListener(TimerEvent.TIMER, onCallTimerEvent);
 		}
 
-		public final function get networkId():int {
-			return _networkId;
+		public final function get network():SocialNetwork {
+			return _network;
 		}
 
 		public final function get sessionUserId():String {
