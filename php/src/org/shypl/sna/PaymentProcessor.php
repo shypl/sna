@@ -39,9 +39,31 @@ abstract class PaymentProcessor {
 
 			$this->delegate->handlePaymentError($e);
 
-			return $this->createResponseError($e);
+			return $this->createHttpResponseError($e);
 		}
 	}
+
+	/**
+	 * @param HttpRequest $request
+	 *
+	 * @return PaymentRequest
+	 */
+	public abstract function createPaymentRequest(HttpRequest $request);
+
+	/**
+	 * @param PaymentRequest $request
+	 * @param string         $orderId
+	 *
+	 * @return HttpResponse
+	 */
+	public abstract function createHttpResponseSuccess(PaymentRequest $request, $orderId);
+
+	/**
+	 * @param PaymentException $error
+	 *
+	 * @return HttpResponse
+	 */
+	public abstract function createHttpResponseError(PaymentException $error);
 
 	/**
 	 * @param HttpRequest $httpRequest
@@ -49,7 +71,7 @@ abstract class PaymentProcessor {
 	 * @return HttpResponse
 	 */
 	protected function doProcess(HttpRequest $httpRequest) {
-		$paymentRequest = $this->createRequest($httpRequest);
+		$paymentRequest = $this->createPaymentRequest($httpRequest);
 		$product = $this->getProduct($paymentRequest->getProductId(), $paymentRequest->getUserId());
 
 		if ($product->getPrice() !== $paymentRequest->getProductPrice()) {
@@ -58,7 +80,7 @@ abstract class PaymentProcessor {
 
 		$orderId = $this->delegate->buyPaymentProduct($product);
 
-		return $this->createResponseSuccess($paymentRequest, $orderId);
+		return $this->createHttpResponseSuccess($paymentRequest, $orderId);
 	}
 
 	/**
@@ -70,26 +92,4 @@ abstract class PaymentProcessor {
 	protected function getProduct($productId, $userId) {
 		return $this->delegate->getPaymentProduct($productId, $userId);
 	}
-
-	/**
-	 * @param HttpRequest $request
-	 *
-	 * @return PaymentRequest
-	 */
-	protected abstract function createRequest(HttpRequest $request);
-
-	/**
-	 * @param PaymentRequest $request
-	 * @param string         $orderId
-	 *
-	 * @return HttpResponse
-	 */
-	protected abstract function createResponseSuccess(PaymentRequest $request, $orderId);
-
-	/**
-	 * @param PaymentException $error
-	 *
-	 * @return HttpResponse
-	 */
-	protected abstract function createResponseError(PaymentException $error);
 }

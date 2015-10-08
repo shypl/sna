@@ -14,7 +14,7 @@ class MmPaymentProcessor extends PaymentProcessor {
 	 *
 	 * @return PaymentRequest
 	 */
-	protected function createRequest(HttpRequest $request) {
+	public function createPaymentRequest(HttpRequest $request) {
 		$productPrice = (int)$request->getParameter('mailiki_price');
 
 		if (!$productPrice) {
@@ -38,7 +38,7 @@ class MmPaymentProcessor extends PaymentProcessor {
 	 *
 	 * @return HttpResponse
 	 */
-	protected function createResponseSuccess(PaymentRequest $request, $orderId) {
+	public function createHttpResponseSuccess(PaymentRequest $request, $orderId) {
 		return HttpResponse::factory(HttpResponse::TYPE_JSON, ['status' => 1]);
 	}
 
@@ -47,7 +47,7 @@ class MmPaymentProcessor extends PaymentProcessor {
 	 *
 	 * @return HttpResponse
 	 */
-	protected function createResponseError(PaymentException $error) {
+	public function createHttpResponseError(PaymentException $error) {
 		switch ($error->getCode()) {
 			case PaymentException::INVALID_REQUEST:
 			case PaymentException::BAD_REQUEST_PARAMETERS:

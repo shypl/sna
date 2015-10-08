@@ -51,7 +51,7 @@ class VkPaymentProcessor extends PaymentProcessor {
 	 *
 	 * @return PaymentRequest
 	 */
-	protected function createRequest(HttpRequest $request) {
+	public function createPaymentRequest(HttpRequest $request) {
 		new PaymentRequest(
 			$request->getParameter('order_id'),
 			$request->getParameter('user_id'),
@@ -66,7 +66,7 @@ class VkPaymentProcessor extends PaymentProcessor {
 	 *
 	 * @return HttpResponse
 	 */
-	protected function createResponseSuccess(PaymentRequest $request, $orderId) {
+	public function createHttpResponseSuccess(PaymentRequest $request, $orderId) {
 		return HttpResponse::factory(HttpResponse::TYPE_JSON, ['response' => ['order_id' => $request->getOrderId(), 'app_order_id' => $orderId]]);
 	}
 
@@ -75,7 +75,7 @@ class VkPaymentProcessor extends PaymentProcessor {
 	 *
 	 * @return HttpResponse
 	 */
-	protected function createResponseError(PaymentException $error) {
+	public function createHttpResponseError(PaymentException $error) {
 		static $codes = [
 			PaymentException::INVALID_REQUEST => 10,
 			PaymentException::BAD_REQUEST_PARAMETERS => 11,

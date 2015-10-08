@@ -14,7 +14,7 @@ class OkPaymentProcessor extends PaymentProcessor {
 	 *
 	 * @return PaymentRequest
 	 */
-	protected function createRequest(HttpRequest $request) {
+	public function createPaymentRequest(HttpRequest $request) {
 		return new PaymentRequest(
 			$request->getParameter('transaction_id'),
 			$request->getParameter('uid'),
@@ -29,7 +29,7 @@ class OkPaymentProcessor extends PaymentProcessor {
 	 *
 	 * @return HttpResponse
 	 */
-	protected function createResponseSuccess(PaymentRequest $request, $orderId) {
+	public function createHttpResponseSuccess(PaymentRequest $request, $orderId) {
 		return HttpResponse::factory(HttpResponse::TYPE_XML,
 			'<?xml version="1.0" encoding="UTF-8"?><callbacks_payment_response xmlns="http://api.forticom.com/1.0/">true</callbacks_payment_response>');
 	}
@@ -39,7 +39,7 @@ class OkPaymentProcessor extends PaymentProcessor {
 	 *
 	 * @return HttpResponse
 	 */
-	protected function createResponseError(PaymentException $error) {
+	public function createHttpResponseError(PaymentException $error) {
 		switch ($error->getCode()) {
 			case PaymentException::INVALID_REQUEST:
 				$code = 104;
