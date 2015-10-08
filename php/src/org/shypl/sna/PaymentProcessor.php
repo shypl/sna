@@ -44,6 +44,15 @@ abstract class PaymentProcessor {
 	}
 
 	/**
+	 * @param PaymentException $error
+	 *
+	 * @return HttpResponse
+	 */
+	public function createHttpResponseServerUnavailable() {
+		return $this->createHttpResponseError(new PaymentException(PaymentException::SERVER_UNAVAILABLE));
+	}
+
+	/**
 	 * @param HttpRequest $request
 	 *
 	 * @return PaymentRequest
