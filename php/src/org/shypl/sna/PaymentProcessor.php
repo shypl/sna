@@ -99,6 +99,6 @@ abstract class PaymentProcessor {
 	 * @return PaymentProduct
 	 */
 	protected function getProduct($productId, $userId) {
-		return $this->delegate->getPaymentProduct($productId, $userId);
+		return $this->delegate->getPaymentProduct($this->adapter->getNetwork(), $productId, $userId);
 	}
 }

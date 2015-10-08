@@ -4,12 +4,13 @@ namespace org\shypl\sna;
 interface PaymentProcessorDelegate {
 
 	/**
-	 * @param string $productId
-	 * @param string $userId
+	 * @param SocialNetwork $socialNetwork
+	 * @param string        $productId
+	 * @param string        $userId
 	 *
 	 * @return PaymentProduct
 	 */
-	public function getPaymentProduct($productId, $userId);
+	public function getPaymentProduct(SocialNetwork $socialNetwork, $productId, $userId);
 
 	/**
 	 * @param PaymentProduct $product
