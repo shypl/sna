@@ -7,7 +7,7 @@ use org\shypl\common\net\HttpResponse;
 
 abstract class PaymentProcessor {
 	private $adapter;
-	private $delegate;
+	protected $delegate;
 
 	/**
 	 * @param Adapter                  $adapter
@@ -37,7 +37,7 @@ abstract class PaymentProcessor {
 				$e = new PaymentException(PaymentException::SERVER_ERROR, $e);
 			}
 
-			$this->delegate->handlePaymentError($e);
+			$this->delegate->handlePaymentError($request, $e);
 
 			return $this->createHttpResponseError($e);
 		}
@@ -81,24 +81,14 @@ abstract class PaymentProcessor {
 	 */
 	protected function doProcess(HttpRequest $httpRequest) {
 		$paymentRequest = $this->createPaymentRequest($httpRequest);
-		$product = $this->getProduct($paymentRequest->getProductId(), $paymentRequest->getUserId());
+		$product = $this->delegate->getPaymentProduct($paymentRequest);
 
 		if ($product->getPrice() !== $paymentRequest->getProductPrice()) {
 			throw new PaymentException(PaymentException::PRODUCT_NOT_FOUND);
 		}
 
-		$orderId = $this->delegate->buyPaymentProduct($product);
+		$orderId = $this->delegate->buyPaymentProduct($paymentRequest, $product);
 
 		return $this->createHttpResponseSuccess($paymentRequest, $orderId);
-	}
-
-	/**
-	 * @param string $productId
-	 * @param string $userId
-	 *
-	 * @return PaymentProduct
-	 */
-	protected function getProduct($productId, $userId) {
-		return $this->delegate->getPaymentProduct($this->adapter->getNetwork(), $productId, $userId);
 	}
 }

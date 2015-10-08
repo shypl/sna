@@ -6,12 +6,13 @@ use org\shypl\sna\Adapter;
 use org\shypl\sna\SocialNetwork;
 
 final class VkSocialNetwork extends SocialNetwork {
+	const ID = 1;
 
 	/**
 	 *
 	 */
 	public function __construct() {
-		parent::__construct(1, "vk");
+		parent::__construct(self::ID, "vk");
 	}
 
 	/**

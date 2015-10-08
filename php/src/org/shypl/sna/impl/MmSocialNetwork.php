@@ -6,12 +6,13 @@ use org\shypl\sna\Adapter;
 use org\shypl\sna\SocialNetwork;
 
 final class MmSocialNetwork extends SocialNetwork {
+	const ID = 2;
 
 	/**
 	 *
 	 */
 	public function __construct() {
-		parent::__construct(2, "mm");
+		parent::__construct(self::ID, "mm");
 	}
 
 	/**

@@ -1,26 +1,28 @@
 <?php
 namespace org\shypl\sna;
 
+use org\shypl\common\net\HttpRequest;
+
 interface PaymentProcessorDelegate {
 
 	/**
-	 * @param SocialNetwork $socialNetwork
-	 * @param string        $productId
-	 * @param string        $userId
+	 * @param PaymentRequest $request
 	 *
 	 * @return PaymentProduct
 	 */
-	public function getPaymentProduct(SocialNetwork $socialNetwork, $productId, $userId);
+	public function getPaymentProduct(PaymentRequest $request);
 
 	/**
+	 * @param PaymentRequest $request
 	 * @param PaymentProduct $product
 	 *
 	 * @return string
 	 */
-	public function buyPaymentProduct(PaymentProduct $product);
+	public function buyPaymentProduct(PaymentRequest $request, PaymentProduct $product);
 
 	/**
+	 * @param HttpRequest      $request
 	 * @param PaymentException $error
 	 */
-	public function handlePaymentError(PaymentException $error);
+	public function handlePaymentError(HttpRequest $request, PaymentException $error);
 }

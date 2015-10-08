@@ -16,6 +16,7 @@ class OkPaymentProcessor extends PaymentProcessor {
 	 */
 	public function createPaymentRequest(HttpRequest $request) {
 		return new PaymentRequest(
+			OkSocialNetwork::ID,
 			$request->getParameter('transaction_id'),
 			$request->getParameter('uid'),
 			$request->getParameter('product_code'),

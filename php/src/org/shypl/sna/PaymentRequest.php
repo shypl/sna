@@ -2,26 +2,38 @@
 namespace org\shypl\sna;
 
 class PaymentRequest {
+	private $networkId;
 	private $orderId;
 	private $userId;
 	private $productId;
 	private $productPrice;
 
 	/**
+	 * @param int $networkId
 	 * @param string $orderId
 	 * @param string $userId
-	 * @param string $productId
-	 * @param int    $productPrice
+	 * @param int $productId
+	 * @param int $productPrice
+	 *
+	 * @throws PaymentException
 	 */
-	public function __construct($orderId, $userId, $productId, $productPrice) {
+	public function __construct($networkId, $orderId, $userId, $productId, $productPrice) {
+		$this->networkId = (int)$networkId;
 		$this->orderId = $orderId;
 		$this->userId = $userId;
-		$this->productId = $productId;
+		$this->productId = (int)$productId;
 		$this->productPrice = (int)$productPrice;
 
 		if (!$this->orderId || !$this->userId || !$this->productId || !$this->productPrice) {
 			throw new PaymentException(PaymentException::BAD_REQUEST_PARAMETERS);
 		}
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getNetworkId() {
+		return $this->networkId;
 	}
 
 	/**
@@ -39,7 +51,7 @@ class PaymentRequest {
 	}
 
 	/**
-	 * @return string
+	 * @return int
 	 */
 	public function getProductId() {
 		return $this->productId;

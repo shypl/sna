@@ -25,6 +25,7 @@ class MmPaymentProcessor extends PaymentProcessor {
 		}
 
 		return new PaymentRequest(
+			MmSocialNetwork::ID,
 			$request->getParameter('transaction_id'),
 			$request->getParameter('uid'),
 			$request->getParameter('service_id'),
