@@ -6,7 +6,7 @@ function __sna(swfId) {
 	// init
 	(function() {
 		var script = document.createElement("script");
-		script.src = "http://api.odnoklassniki.ru/js/fapi5.js";
+		script.src = "//api.odnoklassniki.ru/js/fapi5.js";
 		document.getElementsByTagName('head')[0].appendChild(script);
 
 		function init() {

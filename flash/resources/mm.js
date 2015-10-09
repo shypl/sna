@@ -5,7 +5,7 @@ function __sna(swfId, privateKey) {
 	// init
 	(function() {
 		var script = document.createElement("script");
-		script.src = "http://cdn.connect.mail.ru/js/loader.js";
+		script.src = "//cdn.connect.mail.ru/js/loader.js";
 		document.getElementsByTagName('head')[0].appendChild(script);
 
 		function init() {
