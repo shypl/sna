@@ -23,6 +23,10 @@ public final class SocialNetworkManager {
 		networks.add(network);
 	}
 
+	public static SocialNetwork[] getNetworks() {
+		return networks.toArray(new SocialNetwork[networks.size()]);
+	}
+
 	public static SocialNetwork getNetworkById(int id) {
 		for (SocialNetwork network : networks) {
 			if (network.getId() == id) {
