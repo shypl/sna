@@ -14,10 +14,12 @@ class VkPaymentProcessor extends PaymentProcessor {
 	 * @return HttpResponse
 	 */
 	protected function doProcess(HttpRequest $httpRequest) {
+		$paymentRequest = $this->createPaymentRequest($httpRequest);
+
 		switch ($httpRequest->getParameter('notification_type')) {
 			case 'get_item':
 			case 'get_item_test':
-				$product = $this->getProduct($httpRequest->getParameter('item'), $httpRequest->getParameter('user_id'));
+				$product = $this->delegate->getPaymentProduct($paymentRequest);
 				$response = [
 					'item_id' => $product->getId(),
 					'title' => $product->getName(),
