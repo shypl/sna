@@ -16,11 +16,11 @@ class PaymentProduct {
 	 * @param int    $expiration
 	 */
 	public function __construct($id, $name, $price, $image = null, $expiration = 0) {
-		$this->id = (int)$id;
+		$this->id = $id;
 		$this->name = $name;
-		$this->price = (int)$price;
+		$this->price = $price;
 		$this->image = $image;
-		$this->expiration = (int)$expiration;
+		$this->expiration = $expiration;
 	}
 
 	/**

@@ -18,10 +18,10 @@ class PaymentRequest {
 	 * @throws PaymentException
 	 */
 	public function __construct($networkId, $orderId, $userId, $productId, $productPrice) {
-		$this->networkId = (int)$networkId;
+		$this->networkId = $networkId;
 		$this->orderId = $orderId;
 		$this->userId = $userId;
-		$this->productId = (int)$productId;
+		$this->productId = $productId;
 		$this->productPrice = $productPrice;
 
 		if (!$this->orderId || !$this->userId || !$this->productId) {

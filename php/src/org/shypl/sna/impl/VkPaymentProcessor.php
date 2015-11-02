@@ -54,7 +54,7 @@ class VkPaymentProcessor extends PaymentProcessor {
 	 * @return PaymentRequest
 	 */
 	public function createPaymentRequest(HttpRequest $request) {
-		new PaymentRequest(
+		return new PaymentRequest(
 			VkSocialNetwork::ID,
 			$request->getParameter('order_id'),
 			$request->getParameter('user_id'),

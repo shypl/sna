@@ -2,6 +2,8 @@
 namespace org\shypl\sna;
 
 use Exception;
+use org\shypl\common\core\App;
+use org\shypl\common\core\ErrorHandler;
 use org\shypl\common\net\HttpRequest;
 use org\shypl\common\net\HttpResponse;
 
@@ -35,6 +37,7 @@ abstract class PaymentProcessor {
 		catch (Exception $e) {
 			if (!($e instanceof PaymentException)) {
 				$e = new PaymentException(PaymentException::SERVER_ERROR, $e);
+				ErrorHandler::logException($e);
 			}
 
 			$this->delegate->handlePaymentError($request, $e);
