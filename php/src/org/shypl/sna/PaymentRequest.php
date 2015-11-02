@@ -22,9 +22,9 @@ class PaymentRequest {
 		$this->orderId = $orderId;
 		$this->userId = $userId;
 		$this->productId = (int)$productId;
-		$this->productPrice = (int)$productPrice;
+		$this->productPrice = $productPrice;
 
-		if (!$this->orderId || !$this->userId || !$this->productId || !$this->productPrice) {
+		if (!$this->orderId || !$this->userId || !$this->productId) {
 			throw new PaymentException(PaymentException::BAD_REQUEST_PARAMETERS);
 		}
 	}

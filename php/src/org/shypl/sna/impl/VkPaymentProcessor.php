@@ -58,7 +58,7 @@ class VkPaymentProcessor extends PaymentProcessor {
 			VkSocialNetwork::ID,
 			$request->getParameter('order_id'),
 			$request->getParameter('user_id'),
-			$request->getParameter('item_id'),
+			$request->getParameter('item'),
 			$request->getParameter('item_price')
 		);
 	}
