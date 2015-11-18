@@ -7,7 +7,7 @@ package org.shypl.sna {
 	import org.shypl.common.collection.LinkedList;
 	import org.shypl.common.lang.AbstractMethodException;
 
-	public class AbstractAdapter implements Adapter {
+	public class AbstractAdapter implements SocialNetworkAdapter {
 		private var _network:SocialNetwork;
 		private var _sessionUserId:String;
 		private var _stage:Stage;

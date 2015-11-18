@@ -1,5 +1,5 @@
 package org.shypl.sna {
-	public interface Adapter {
+	public interface SocialNetworkAdapter {
 		function get network():SocialNetwork;
 
 		function get sessionUserId():String;

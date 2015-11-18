@@ -6,12 +6,12 @@ package org.shypl.sna {
 
 	[Abstract]
 	public class JsAdapterCreator {
-		private var _receiver:AdapterReceiver;
+		private var _receiver:SocialNetworkAdapterReceiver;
 		private var _stage:Stage;
 		private var _sessionUserId:String;
 		private var _jsArgs:Array;
 
-		public function JsAdapterCreator(receiver:AdapterReceiver, stage:Stage, sessionUserId:String, jsArgs:Array = null) {
+		public function JsAdapterCreator(receiver:SocialNetworkAdapterReceiver, stage:Stage, sessionUserId:String, jsArgs:Array = null) {
 			_receiver = receiver;
 			_stage = stage;
 			_sessionUserId = sessionUserId;
@@ -31,7 +31,7 @@ package org.shypl.sna {
 		}
 
 		[Abstract]
-		protected function getAdapter(stage:Stage, sessionUserId:String):Adapter {
+		protected function getAdapter(stage:Stage, sessionUserId:String):SocialNetworkAdapter {
 			throw new AbstractMethodException();
 		}
 
@@ -52,7 +52,7 @@ package org.shypl.sna {
 
 		private function complete():void {
 			if (_receiver != null) {
-				_receiver.receiveAdapter(getAdapter(_stage, _sessionUserId));
+				_receiver.receiveSocialNetworkAdapter(getAdapter(_stage, _sessionUserId));
 				_receiver = null;
 				_stage = null;
 				_sessionUserId = null;

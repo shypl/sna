@@ -1,67 +1,43 @@
 package org.shypl.sna.impl {
-	import org.shypl.common.lang.Enum;
 	import org.shypl.common.util.NumberUtils;
-	import org.shypl.sna.Adapter;
 	import org.shypl.sna.FriendRequest;
 	import org.shypl.sna.MakeFriendsRequestHandler;
 	import org.shypl.sna.MakePaymentHandler;
 	import org.shypl.sna.MakeWallPostHandler;
-	import org.shypl.sna.SnUser;
-	import org.shypl.sna.SnUserGender;
 	import org.shypl.sna.SnUserIdListReceiver;
 	import org.shypl.sna.SnUserListReceiver;
 	import org.shypl.sna.SnUserReceiver;
 	import org.shypl.sna.SocialNetwork;
-	import org.shypl.sna.SocialNetworkManager;
+	import org.shypl.sna.SocialNetworkAdapter;
 	import org.shypl.sna.WallPost;
 
-	public class DevAdapter implements Adapter {
-		private var _sessionUserId:String;
-
-		public function DevAdapter(sessionUserId:String) {
-			_sessionUserId = sessionUserId;
-		}
-
+	public class FakeAdapter implements SocialNetworkAdapter {
 		public function get network():SocialNetwork {
-			return SocialNetworkManager.getNetworkById(0);
+			return null;
 		}
 
 		public function get sessionUserId():String {
-			return _sessionUserId;
+			return null;
 		}
 
 		public function getSessionUser(receiver:SnUserReceiver):void {
-			receiver.receiverSnUser(new SnUser(_sessionUserId, "User-" + _sessionUserId, "Developer", null, SnUserGender.MALE));
+			receiver.receiverSnUser(null);
 		}
 
 		public function getUser(id:String, receiver:SnUserReceiver):void {
-			receiver.receiverSnUser(new SnUser(id, "User-" + id, "Developer", null, SnUserGender.MALE));
+			receiver.receiverSnUser(null);
 		}
 
 		public function getUsers(ids:Vector.<String>, receiver:SnUserListReceiver):void {
-			var list:Vector.<SnUser> = new Vector.<SnUser>(ids.length, true);
-			for (var i:int = 0; i < ids.length; i++) {
-				var id:String = ids[i];
-				list[i] = new SnUser(id, "User-" + id, "Developer", null, SnUserGender(Enum.valueOfOrdinal(SnUserGender, i % 3)));
-			}
-			receiver.receiverSnUserList(list);
+			receiver.receiverSnUserList(null);
 		}
 
 		public function getFriends(limit:int, offset:int, receiver:SnUserListReceiver):void {
-			var list:Vector.<SnUser> = new Vector.<SnUser>(limit, true);
-			for (var i:int = 0; i < limit; i++) {
-				var id:String = String(offset + i + 1);
-				list[i] = new SnUser(id, "User-" + id, "Developer", null, SnUserGender(Enum.valueOfOrdinal(SnUserGender, i % 3)));
-			}
-			receiver.receiverSnUserList(list);
+			receiver.receiverSnUserList(null);
 		}
 
 		public function getAppFriendIds(receiver:SnUserIdListReceiver):void {
-			var list:Vector.<String> = new Vector.<String>(10, true);
-			for (var i:int = 0; i < list.length; i++) {
-				list[i] = String(i + 1);
-			}
-			receiver.receiverSnUserIdList(list);
+			receiver.receiverSnUserIdList(null);
 		}
 
 		public function inviteFriends():void {

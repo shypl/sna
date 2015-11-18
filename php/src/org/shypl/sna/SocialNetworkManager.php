@@ -1,9 +1,7 @@
 <?php
 namespace org\shypl\sna;
 
-use Exception;
 use InvalidArgumentException;
-use org\shypl\sna\impl\DevSocialNetwork;
 use org\shypl\sna\impl\MmSocialNetwork;
 use org\shypl\sna\impl\OkSocialNetwork;
 use org\shypl\sna\impl\VkSocialNetwork;
@@ -50,7 +48,6 @@ final class SocialNetworkManager {
 	}
 }
 
-SocialNetworkManager::registerNetwork(new DevSocialNetwork());
 SocialNetworkManager::registerNetwork(new VkSocialNetwork());
 SocialNetworkManager::registerNetwork(new MmSocialNetwork());
 SocialNetworkManager::registerNetwork(new OkSocialNetwork());

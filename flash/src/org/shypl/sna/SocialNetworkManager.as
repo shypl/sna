@@ -3,8 +3,7 @@ package org.shypl.sna {
 	import flash.external.ExternalInterface;
 
 	import org.shypl.common.collection.NoSuchElementException;
-	import org.shypl.sna.impl.DevAdapter;
-	import org.shypl.sna.impl.DevSocialNetwork;
+	import org.shypl.sna.impl.FakeAdapter;
 	import org.shypl.sna.impl.MmSocialNetwork;
 	import org.shypl.sna.impl.OkSocialNetwork;
 	import org.shypl.sna.impl.VkSocialNetwork;
@@ -13,7 +12,6 @@ package org.shypl.sna {
 		private static const _networks:Vector.<SocialNetwork> = new Vector.<SocialNetwork>();
 
 		{
-			registerNetwork(new DevSocialNetwork());
 			registerNetwork(new VkSocialNetwork());
 			registerNetwork(new MmSocialNetwork());
 			registerNetwork(new OkSocialNetwork());
@@ -41,13 +39,13 @@ package org.shypl.sna {
 			throw new NoSuchElementException("Network by name " + name + " is not registered");
 		}
 
-		public static function createAdapterByEnvironment(receiver:AdapterReceiver, stage:Stage):void {
+		public static function createAdapterByEnvironment(receiver:SocialNetworkAdapterReceiver, stage:Stage):void {
 			if (ExternalInterface.available) {
 				var parameters:Object = ExternalInterface.call("__sna_fap");
 				getNetworkById(parameters.nid).createAdapter(receiver, stage, parameters);
 			}
 			else {
-				receiver.receiveAdapter(new DevAdapter('DEV-1'));
+				receiver.receiveSocialNetworkAdapter(new FakeAdapter());
 			}
 		}
 	}

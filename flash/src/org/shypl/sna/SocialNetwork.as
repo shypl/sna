@@ -22,7 +22,7 @@ package org.shypl.sna {
 		}
 
 		[Abstract]
-		public function createAdapter(receiver:AdapterReceiver, stage:Stage, parameters:Object):void {
+		public function createAdapter(receiver:SocialNetworkAdapterReceiver, stage:Stage, parameters:Object):void {
 			throw new AbstractMethodException();
 		}
 	}

@@ -215,17 +215,17 @@ package org.shypl.sna.impl {
 
 	}
 }
-import org.shypl.sna.Adapter;
+import org.shypl.sna.SocialNetworkAdapter;
 import org.shypl.sna.SnUserIdListReceiver;
 import org.shypl.sna.SnUserListReceiver;
 
 class GetFriendsHelper implements SnUserIdListReceiver {
-	private var _adapter:Adapter;
+	private var _adapter:SocialNetworkAdapter;
 	private var _limit:int;
 	private var _offset:int;
 	private var _receiver:SnUserListReceiver;
 
-	public function GetFriendsHelper(adapter:Adapter, limit:int, offset:int, receiver:SnUserListReceiver) {
+	public function GetFriendsHelper(adapter:SocialNetworkAdapter, limit:int, offset:int, receiver:SnUserListReceiver) {
 		_adapter = adapter;
 		_limit = limit;
 		_offset = offset;
