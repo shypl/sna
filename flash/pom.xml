@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.shypl.sna</groupId>
+		<artifactId>sna-parent</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>sna-flash</artifactId>
+	<packaging>swc</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.shypl.common</groupId>
+			<artifactId>common-flash</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+			<type>swc</type>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<sourceDirectory>src/main/flex</sourceDirectory>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.10</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>com.google.javascript</groupId>
+									<artifactId>closure-compiler</artifactId>
+									<version>v20160208</version>
+									<type>jar</type>
+									<overWrite>false</overWrite>
+									<destFileName>closure-compiler.jar</destFileName>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.4.0</version>
+				<executions>
+					<execution>
+						<id>js-vk</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<workingDirectory>${project.basedir}/src/main/js</workingDirectory>
+							<executable>java</executable>
+							<arguments>
+								<argument>-jar</argument>
+								<argument>${project.build.directory}/dependency/closure-compiler.jar</argument>
+								<argument>--js</argument>
+								<argument>vk.js</argument>
+								<argument>--js_output_file</argument>
+								<argument>vk.min.js</argument>
+							</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>js-mm</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<workingDirectory>${project.basedir}/src/main/js</workingDirectory>
+							<executable>java</executable>
+							<arguments>
+								<argument>-jar</argument>
+								<argument>${project.build.directory}/dependency/closure-compiler.jar</argument>
+								<argument>--js</argument>
+								<argument>mm.js</argument>
+								<argument>--js_output_file</argument>
+								<argument>mm.min.js</argument>
+							</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>js-ok</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<workingDirectory>${project.basedir}/src/main/js</workingDirectory>
+							<executable>java</executable>
+							<arguments>
+								<argument>-jar</argument>
+								<argument>${project.build.directory}/dependency/closure-compiler.jar</argument>
+								<argument>--js</argument>
+								<argument>ok.js</argument>
+								<argument>--js_output_file</argument>
+								<argument>ok.min.js</argument>
+							</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.8</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<replaceregexp flags="s" match=";$" replace="">
+									<fileset dir="${project.basedir}/src/main/js/">
+										<include name="*.min.js"/>
+									</fileset>
+								</replaceregexp>
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>net.flexmojos.oss</groupId>
+				<artifactId>flexmojos-maven-plugin</artifactId>
+				<version>7.1.0</version>
+				<extensions>true</extensions>
+
+				<configuration>
+					<debug>true</debug>
+				</configuration>
+
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.flex</groupId>
+						<artifactId>compiler</artifactId>
+						<version>4.15.0</version>
+						<type>pom</type>
+					</dependency>
+				</dependencies>
+
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>sources</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<repositories>
+		<repository>
+			<id>shypl-thirdparty</id>
+			<url>http://178.132.202.170:8080/nexus/content/repositories/thirdparty/</url>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>sonatype</id>
+			<url>https://oss.sonatype.org/content/repositories/releases/</url>
+		</pluginRepository>
+		<pluginRepository>
+			<id>shypl-thirdparty</id>
+			<url>http://178.132.202.170:8080/nexus/content/repositories/thirdparty/</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+</project>
