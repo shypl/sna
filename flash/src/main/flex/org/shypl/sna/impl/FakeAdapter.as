@@ -4,6 +4,7 @@ package org.shypl.sna.impl {
 	import org.shypl.sna.MakeFriendsRequestHandler;
 	import org.shypl.sna.MakePaymentHandler;
 	import org.shypl.sna.MakeWallPostHandler;
+	import org.shypl.sna.SnUser;
 	import org.shypl.sna.SnUserIdListReceiver;
 	import org.shypl.sna.SnUserListReceiver;
 	import org.shypl.sna.SnUserReceiver;
@@ -29,30 +30,30 @@ package org.shypl.sna.impl {
 		}
 
 		public function getUsers(ids:Vector.<String>, receiver:SnUserListReceiver):void {
-			receiver.receiverSnUserList(null);
+			receiver.receiverSnUserList(new Vector.<SnUser>(0, true));
 		}
 
 		public function getFriends(limit:int, offset:int, receiver:SnUserListReceiver):void {
-			receiver.receiverSnUserList(null);
+			receiver.receiverSnUserList(new Vector.<SnUser>(0, true));
 		}
 
 		public function getAppFriendIds(receiver:SnUserIdListReceiver):void {
-			receiver.receiverSnUserIdList(null);
+			receiver.receiverSnUserIdList(new Vector.<String>(0, true));
 		}
 
 		public function inviteFriends():void {
 		}
 
 		public function makePayment(id:int, name:String, price:int, handler:MakePaymentHandler):void {
-			handler.handleMakePaymentResult(false);
+			handler.handleMakePaymentResult(true);
 		}
 
 		public function makeWallPost(post:WallPost, handler:MakeWallPostHandler):void {
-			handler.handleMakeWallPostResult(false);
+			handler.handleMakeWallPostResult(true);
 		}
 
 		public function makeFriendsRequest(userId:String, request:FriendRequest, handler:MakeFriendsRequestHandler):void {
-			handler.handleMakeFriendRequestResult(false);
+			handler.handleMakeFriendRequestResult(true);
 		}
 
 		public function getCurrencyLabelForNumber(number:Number):String {
