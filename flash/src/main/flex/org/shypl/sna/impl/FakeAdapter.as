@@ -13,6 +13,10 @@ package org.shypl.sna.impl {
 	import org.shypl.sna.WallPost;
 
 	public class FakeAdapter implements SocialNetworkAdapter {
+		public function get available():Boolean {
+			return false;
+		}
+
 		public function get network():SocialNetwork {
 			return null;
 		}
@@ -45,15 +49,15 @@ package org.shypl.sna.impl {
 		}
 
 		public function makePayment(id:int, name:String, price:int, handler:MakePaymentHandler):void {
-			handler.handleMakePaymentResult(true);
+			handler.handleMakePaymentResult(false);
 		}
 
 		public function makeWallPost(post:WallPost, handler:MakeWallPostHandler):void {
-			handler.handleMakeWallPostResult(true);
+			handler.handleMakeWallPostResult(false);
 		}
 
 		public function makeFriendsRequest(userId:String, request:FriendRequest, handler:MakeFriendsRequestHandler):void {
-			handler.handleMakeFriendRequestResult(true);
+			handler.handleMakeFriendRequestResult(false);
 		}
 
 		public function getCurrencyLabelForNumber(number:Number):String {

@@ -27,6 +27,10 @@ package org.shypl.sna {
 			_callTimer.addEventListener(TimerEvent.TIMER, onCallTimerEvent);
 		}
 
+		public final function get available():Boolean {
+			return true;
+		}
+
 		public final function get network():SocialNetwork {
 			return _network;
 		}
