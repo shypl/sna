@@ -167,21 +167,14 @@
 		</plugins>
 	</build>
 
-	<repositories>
-		<repository>
-			<id>shypl-thirdparty</id>
-			<url>http://178.132.202.170:8080/nexus/content/repositories/thirdparty/</url>
-		</repository>
-	</repositories>
-
 	<pluginRepositories>
+		<pluginRepository>
+			<id>shypl-thirdparty</id>
+			<url>http://nexus.shypl.org/content/repositories/thirdparty/</url>
+		</pluginRepository>
 		<pluginRepository>
 			<id>sonatype</id>
 			<url>https://oss.sonatype.org/content/repositories/releases/</url>
-		</pluginRepository>
-		<pluginRepository>
-			<id>shypl-thirdparty</id>
-			<url>http://178.132.202.170:8080/nexus/content/repositories/thirdparty/</url>
 		</pluginRepository>
 	</pluginRepositories>
 
