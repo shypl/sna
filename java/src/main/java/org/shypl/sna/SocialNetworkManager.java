@@ -40,12 +40,12 @@ public final class SocialNetworkManager {
 		throw new NoSuchElementException("Network by id " + id + " is not registered");
 	}
 
-	public static SocialNetwork getNetwork(String name) {
+	public static SocialNetwork getNetwork(String code) {
 		for (SocialNetwork network : networks) {
-			if (network.getName().equals(name)) {
+			if (network.getCode().equals(code)) {
 				return network;
 			}
 		}
-		throw new NoSuchElementException("Network by name " + name + " is not registered");
+		throw new NoSuchElementException("Network by code \"" + code + "\" is not registered");
 	}
 }

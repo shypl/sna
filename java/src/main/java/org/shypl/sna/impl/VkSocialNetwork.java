@@ -4,6 +4,6 @@ import org.shypl.sna.SocialNetwork;
 
 public final class VkSocialNetwork extends SocialNetwork {
 	public VkSocialNetwork() {
-		super(1, "vk");
+		super(1, "vk", "ВКонтакте");
 	}
 }

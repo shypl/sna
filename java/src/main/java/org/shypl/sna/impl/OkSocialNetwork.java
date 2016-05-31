@@ -4,6 +4,6 @@ import org.shypl.sna.SocialNetwork;
 
 public final class OkSocialNetwork extends SocialNetwork {
 	public OkSocialNetwork() {
-		super(3, "ok");
+		super(3, "ok", "Одноклассники");
 	}
 }

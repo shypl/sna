@@ -4,6 +4,6 @@ import org.shypl.sna.SocialNetwork;
 
 public final class MmSocialNetwork extends SocialNetwork {
 	public MmSocialNetwork() {
-		super(2, "mm");
+		super(2, "mm", "Мой Мир");
 	}
 }
