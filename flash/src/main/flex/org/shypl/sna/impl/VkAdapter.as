@@ -175,6 +175,9 @@ package org.shypl.sna.impl {
 					}
 				}
 			}
+			catch (e:SnaException) {
+				throw e;
+			}
 			catch (e:Error) {
 				throw new SnaException("Error on handle api callback", e);
 			}

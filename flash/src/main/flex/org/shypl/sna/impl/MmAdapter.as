@@ -136,10 +136,6 @@ package org.shypl.sna.impl {
 			}
 
 			try {
-				if (data.error) {
-					throw new SnaException("Error when calling api (" + data.error.error_msg + " [" + data.error.error_code + "])");
-				}
-				data = data.response;
 				const handler:Object = getCallbackHandler(callbackId);
 
 				if (handler is SnUserListReceiver) {
@@ -150,6 +146,7 @@ package org.shypl.sna.impl {
 				}
 			}
 			catch (e:Error) {
+				logger.error("Error on handle api callback", e);
 				throw new SnaException("Error on handle api callback", e);
 			}
 		}

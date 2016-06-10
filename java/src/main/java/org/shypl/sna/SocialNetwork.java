@@ -1,6 +1,7 @@
 package org.shypl.sna;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public abstract class SocialNetwork implements Comparable<SocialNetwork>, Serializable {
 	private final int    id;
@@ -38,6 +39,7 @@ public abstract class SocialNetwork implements Comparable<SocialNetwork>, Serial
 	@Override
 	public int hashCode() {
 		int result = id;
+		Objects.hash(id, code, name);
 		result = 31 * result + (code != null ? code.hashCode() : 0);
 		result = 31 * result + (name != null ? name.hashCode() : 0);
 		return result;

@@ -18,11 +18,11 @@ class PaymentRequest {
 	 * @throws PaymentException
 	 */
 	public function __construct($networkId, $orderId, $userId, $productId, $productPrice) {
-		$this->networkId = $networkId;
+		$this->networkId = (int)$networkId;
 		$this->orderId = $orderId;
 		$this->userId = $userId;
-		$this->productId = $productId;
-		$this->productPrice = $productPrice;
+		$this->productId = (int)$productId;
+		$this->productPrice = (int)$productPrice;
 
 		if (!$this->orderId || !$this->userId || !$this->productId) {
 			throw new PaymentException(PaymentException::BAD_REQUEST_PARAMETERS);

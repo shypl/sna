@@ -16,20 +16,13 @@ class PaymentProduct {
 	 * @param int    $expiration
 	 */
 	public function __construct($id, $name, $price, $image = null, $expiration = 0) {
-		$this->id = $id;
+		$this->id = (int)$id;
 		$this->name = $name;
-		$this->price = $price;
+		$this->price = (int)$price;
 		$this->image = $image;
 		$this->expiration = $expiration;
 	}
-
-	/**
-	 * @return int
-	 */
-	public function getNetworkId() {
-		return $this->networkId;
-	}
-
+	
 	/**
 	 * @return int
 	 */
