@@ -1,6 +1,8 @@
 package org.shypl.sna;
 
-public abstract class SocialNetwork {
+import java.io.Serializable;
+
+public abstract class SocialNetwork implements Comparable<SocialNetwork>, Serializable {
 	private final int    id;
 	private final String code;
 	private final String name;
@@ -31,5 +33,10 @@ public abstract class SocialNetwork {
 	@Override
 	public boolean equals(Object obj) {
 		return obj == this || obj instanceof SocialNetwork && ((SocialNetwork)obj).id == id;
+	}
+
+	@Override
+	public int compareTo(SocialNetwork other) {
+		return Integer.compare(this.getId(), other.getId());
 	}
 }
