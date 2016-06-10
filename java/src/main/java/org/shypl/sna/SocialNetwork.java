@@ -36,6 +36,14 @@ public abstract class SocialNetwork implements Comparable<SocialNetwork>, Serial
 	}
 
 	@Override
+	public int hashCode() {
+		int result = id;
+		result = 31 * result + (code != null ? code.hashCode() : 0);
+		result = 31 * result + (name != null ? name.hashCode() : 0);
+		return result;
+	}
+
+	@Override
 	public int compareTo(SocialNetwork other) {
 		return Integer.compare(this.getId(), other.getId());
 	}
