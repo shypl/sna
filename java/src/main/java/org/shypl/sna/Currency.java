@@ -2,8 +2,13 @@ package org.shypl.sna;
 
 import org.shypl.common.util.Declination;
 
-public class Currency {
-	private String name;
+import java.io.Serializable;
+
+public class Currency implements Serializable {
+
+	private static final long serialVersionUID = 42;
+
+	private String      name;
 	private Declination declination;
 
 	public Currency(String name, Declination declination) {

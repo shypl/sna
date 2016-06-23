@@ -3,6 +3,8 @@ package org.shypl.sna;
 import java.io.Serializable;
 
 public abstract class SocialNetwork implements Comparable<SocialNetwork>, Serializable {
+	private static final long serialVersionUID = 42;
+
 	private final int      id;
 	private final String   code;
 	private final String   name;
