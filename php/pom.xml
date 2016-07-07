@@ -12,6 +12,8 @@
 	<artifactId>sna-php</artifactId>
 	<packaging>php</packaging>
 
+	<name>SNA Php</name>
+
 	<pluginRepositories>
 		<pluginRepository>
 			<id>nexus2.deviapps.com</id>

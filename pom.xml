@@ -12,6 +12,41 @@
 	<description>Social Network Adapter</description>
 	<url>https://github.com/shypl/sna.git</url>
 
+	<scm>
+		<connection>scm:git:https://github.com/shypl/sna.git</connection>
+		<developerConnection>scm:git:https://github.com/shypl/sna.git</developerConnection>
+		<url>https://github.com/shypl/sna</url>
+		<tag>HEAD</tag>
+	</scm>
+
+	<distributionManagement>
+		<repository>
+			<id>shypl</id>
+			<url>http://nexus.shypl.org/content/groups/public/</url>
+		</repository>
+		<snapshotRepository>
+			<id>shypl-snapshots</id>
+			<url>http://nexus.shypl.org/content/repositories/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<repositories>
+		<repository>
+			<id>shypl</id>
+			<url>http://nexus.shypl.org/content/groups/public/</url>
+		</repository>
+	</repositories>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<modules>
+		<module>java</module>
+		<module>flash</module>
+		<module>php</module>
+	</modules>
+
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
@@ -27,39 +62,4 @@
 			<email>shnyaka@gmail.com</email>
 		</developer>
 	</developers>
-
-	<scm>
-		<connection>scm:git:https://github.com/shypl/sna.git</connection>
-		<developerConnection>scm:git:https://github.com/shypl/sna.git</developerConnection>
-		<url>https://github.com/shypl/sna</url>
-		<tag>HEAD</tag>
-	</scm>
-
-	<distributionManagement>
-		<repository>
-			<id>shypl-releases</id>
-			<url>http://nexus.shypl.org/content/repositories/releases/</url>
-		</repository>
-		<snapshotRepository>
-			<id>shypl-snapshots</id>
-			<url>http://nexus.shypl.org/content/repositories/snapshots/</url>
-		</snapshotRepository>
-	</distributionManagement>
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-
-	<modules>
-		<module>java</module>
-		<module>flash</module>
-		<module>php</module>
-	</modules>
-
-	<repositories>
-		<repository>
-			<id>shypl</id>
-			<url>http://nexus.shypl.org/content/groups/public/</url>
-		</repository>
-	</repositories>
 </project>
