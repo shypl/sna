@@ -43,7 +43,7 @@
 	<build>
 		<sourceDirectory>src/main/actionscript</sourceDirectory>
 		<plugins>
-			<plugin>
+			<!--<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
 				<version>2.10</version>
@@ -85,9 +85,9 @@
 							<arguments>
 								<argument>-jar</argument>
 								<argument>${project.build.directory}/dependency/closure-compiler.jar</argument>
-								<argument>--js</argument>
+								<argument>&#45;&#45;js</argument>
 								<argument>vk.js</argument>
-								<argument>--js_output_file</argument>
+								<argument>&#45;&#45;js_output_file</argument>
 								<argument>vk.min.js</argument>
 							</arguments>
 						</configuration>
@@ -104,9 +104,9 @@
 							<arguments>
 								<argument>-jar</argument>
 								<argument>${project.build.directory}/dependency/closure-compiler.jar</argument>
-								<argument>--js</argument>
+								<argument>&#45;&#45;js</argument>
 								<argument>mm.js</argument>
-								<argument>--js_output_file</argument>
+								<argument>&#45;&#45;js_output_file</argument>
 								<argument>mm.min.js</argument>
 							</arguments>
 						</configuration>
@@ -123,9 +123,9 @@
 							<arguments>
 								<argument>-jar</argument>
 								<argument>${project.build.directory}/dependency/closure-compiler.jar</argument>
-								<argument>--js</argument>
+								<argument>&#45;&#45;js</argument>
 								<argument>ok.js</argument>
-								<argument>--js_output_file</argument>
+								<argument>&#45;&#45;js_output_file</argument>
 								<argument>ok.min.js</argument>
 							</arguments>
 						</configuration>
@@ -153,7 +153,7 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin>-->
 
 			<plugin>
 				<groupId>net.flexmojos.oss</groupId>

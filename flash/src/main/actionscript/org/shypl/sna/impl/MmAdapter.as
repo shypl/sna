@@ -87,6 +87,9 @@ package org.shypl.sna.impl {
 			_handlerMakePayment = handler;
 
 			closeFullScreen();
+			showVoile(function():void{
+				handlePaymentCallback(false);
+			});
 			callApi("app.payments.showDialog", [{service_id: id, service_name: name, mailiki_price: price}], null);
 		}
 
@@ -97,6 +100,9 @@ package org.shypl.sna.impl {
 			_handlerMakeWallPost = handler;
 
 			closeFullScreen();
+			showVoile(function():void{
+				handleWallPostCallback(false);
+			});
 			callApi("common.stream.post", [{text: post.message, img_url: post.image}], null);
 		}
 
@@ -108,6 +114,9 @@ package org.shypl.sna.impl {
 			_friendsRequestUserId = userId;
 
 			closeFullScreen();
+			showVoile(function():void{
+				handleFriendsRequestCallback(null);
+			});
 			callApi("app.friends.request", [{text: request.message, image_url: request.image, friends: [userId]}], null);
 		}
 
@@ -152,6 +161,7 @@ package org.shypl.sna.impl {
 		}
 
 		private function handlePaymentCallback(success:Boolean):void {
+			hideVoile();
 			logger.debug("payment < {}", success);
 
 			try {
@@ -166,6 +176,7 @@ package org.shypl.sna.impl {
 		}
 
 		private function handleFriendsRequestCallback(data:Object):void {
+			hideVoile();
 			if (logger.isDebugEnabled()) {
 				logger.debug("friends request < {}", data);
 			}
@@ -187,6 +198,7 @@ package org.shypl.sna.impl {
 		}
 
 		private function handleWallPostCallback(success:Boolean):void {
+			hideVoile();
 			logger.debug("wall post < {}", success);
 
 			try {

@@ -92,6 +92,9 @@ package org.shypl.sna.impl {
 			logger.debug("payment > id: {}, name: {}, price: {}", id, name, price);
 
 			closeFullScreen();
+			showVoile(function():void{
+				handlePaymentCallback(false);
+			});
 			ExternalInterface.call("FAPI.UI.showPayment", name, name, id, price, null, null, "ok", "true");
 		}
 
@@ -104,6 +107,9 @@ package org.shypl.sna.impl {
 			logger.debug("wall post > message: {}", post.message);
 
 			closeFullScreen();
+			showVoile(function():void{
+				handleWallPostCallback(false);
+			});
 			ExternalInterface.call("__sna_makeWallPost", post.message);
 		}
 
@@ -117,6 +123,9 @@ package org.shypl.sna.impl {
 			logger.debug("friends request > user: {}, message: {}", userId, request.message);
 
 			closeFullScreen();
+			showVoile(function():void{
+				handleFriendsRequestCallback(false, null);
+			});
 			ExternalInterface.call("FAPI.UI.showNotification", request.message, null, userId);
 		}
 
@@ -161,6 +170,7 @@ package org.shypl.sna.impl {
 		}
 
 		private function handlePaymentCallback(success:Boolean):void {
+			hideVoile();
 			logger.debug("payment < {} {}", success);
 			try {
 				if (_handlerMakePayment) {
@@ -174,6 +184,7 @@ package org.shypl.sna.impl {
 		}
 
 		private function handleFriendsRequestCallback(success:Boolean, data:Object):void {
+			hideVoile();
 			if (logger.isDebugEnabled()) {
 				logger.debug("friends request < {} {}", success, data);
 			}
@@ -200,6 +211,7 @@ package org.shypl.sna.impl {
 		}
 
 		private function handleWallPostCallback(success:Boolean):void {
+			hideVoile();
 			logger.debug("wall post < {}", success);
 
 			try {

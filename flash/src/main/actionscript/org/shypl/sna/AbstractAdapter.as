@@ -3,10 +3,12 @@ package org.shypl.sna {
 	import flash.display.StageDisplayState;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
-
+	
 	import org.shypl.common.collection.LinkedList;
 	import org.shypl.common.lang.AbstractMethodException;
-
+	import org.shypl.common.lang.isNull;
+	import org.shypl.common.lang.notNull;
+	
 	public class AbstractAdapter implements SocialNetworkAdapter {
 		private var _network:SocialNetwork;
 		private var _sessionUserId:String;
@@ -17,6 +19,8 @@ package org.shypl.sna {
 		private var _callTimer:Timer = new Timer(400, 1);
 		private var _lastCallbackHandlerId:int = 0;
 		private var _callbackHandlers:Object = {};
+		
+		private var _voile:Voile;
 
 		public function AbstractAdapter(networkId:int, getUsersLimit:int, stage:Stage, sessionUserId:String) {
 			_network = SocialNetworkManager.getNetworkById(networkId);
@@ -117,6 +121,19 @@ package org.shypl.sna {
 		protected final function closeFullScreen():void {
 			if (_stage.displayState != StageDisplayState.NORMAL) {
 				_stage.displayState = StageDisplayState.NORMAL
+			}
+		}
+		
+		protected final function showVoile(callback:Function):void {
+			if (isNull(_voile)) {
+				_voile = new Voile(_stage, callback);
+			}
+		}
+		
+		protected final function hideVoile():void {
+			if (notNull(_voile)) {
+				_voile.hide();
+				_voile = null;
 			}
 		}
 
