@@ -21,8 +21,8 @@
 
 	<distributionManagement>
 		<repository>
-			<id>shypl</id>
-			<url>http://nexus.shypl.org/content/groups/public/</url>
+			<id>shypl-releases</id>
+			<url>http://nexus.shypl.org/content/repositories/releases/</url>
 		</repository>
 		<snapshotRepository>
 			<id>shypl-snapshots</id>
