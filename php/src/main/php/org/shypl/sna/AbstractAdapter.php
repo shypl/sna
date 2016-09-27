@@ -30,16 +30,16 @@ abstract class AbstractAdapter implements Adapter {
 	 *
 	 * @return mixed
 	 */
-	public function callApi($method, array $parameters = []) {
+	public function callApi($method, array $parameters = array()) {
 		$parameters = $this->defineApiRequestParameters($method, $parameters);
 
-		$context = stream_context_create(['http' => [
+		$context = stream_context_create(array('http' => array(
 			'method' => 'POST',
 			'timeout' => 30,
 			'ignore_errors' => true,
 			'header' => 'Content-type: application/x-www-form-urlencoded',
 			'content' => http_build_query($parameters)
-		]]);
+		)));
 
 		$response = file_get_contents($this->apiUrl, null, $context);
 
@@ -73,10 +73,10 @@ abstract class AbstractAdapter implements Adapter {
 	 * @return array
 	 */
 	protected function defineFlashAdapterParameters(HttpRequest $request) {
-		return [
+		return array(
 			'nid' => $this->network->getId(),
 			'uid' => $this->getUserIdFromRequest($request)
-		];
+		);
 	}
 
 	/**

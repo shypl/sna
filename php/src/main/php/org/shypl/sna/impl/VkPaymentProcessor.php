@@ -20,11 +20,11 @@ class VkPaymentProcessor extends PaymentProcessor {
 			case 'get_item':
 			case 'get_item_test':
 				$product = $this->delegate->getPaymentProduct($paymentRequest);
-				$response = [
+				$response = array(
 					'item_id' => $product->getId(),
 					'title' => $product->getName(),
 					'price' => $product->getPrice()
-				];
+				);
 
 				if ($product->hasImage()) {
 					$response['photo_url'] = $product->getImage();
@@ -34,7 +34,7 @@ class VkPaymentProcessor extends PaymentProcessor {
 					$response['expiration'] = $product->getExpiration();
 				}
 
-				return HttpResponse::factory(HttpResponse::TYPE_JSON, ['response' => $response]);
+				return HttpResponse::factory(HttpResponse::TYPE_JSON, array('response' => $response));
 
 			case 'order_status_change':
 			case 'order_status_change_test':
@@ -70,7 +70,7 @@ class VkPaymentProcessor extends PaymentProcessor {
 	 * @return HttpResponse
 	 */
 	public function createHttpResponseSuccess(PaymentRequest $request, $orderId) {
-		return HttpResponse::factory(HttpResponse::TYPE_JSON, ['response' => ['order_id' => $request->getOrderId(), 'app_order_id' => $orderId]]);
+		return HttpResponse::factory(HttpResponse::TYPE_JSON, array('response' => array('order_id' => $request->getOrderId(), 'app_order_id' => $orderId)));
 	}
 
 	/**
@@ -79,19 +79,19 @@ class VkPaymentProcessor extends PaymentProcessor {
 	 * @return HttpResponse
 	 */
 	public function createHttpResponseError(PaymentException $error) {
-		static $codes = [
+		static $codes = array(
 			PaymentException::INVALID_REQUEST => 10,
 			PaymentException::BAD_REQUEST_PARAMETERS => 11,
 			PaymentException::USER_NOT_FOUND => 22,
 			PaymentException::PRODUCT_NOT_FOUND => 20,
 			PaymentException::SERVER_UNAVAILABLE => 100,
 			PaymentException::SERVER_ERROR => 101,
-		];
+		);
 
-		return HttpResponse::factory(HttpResponse::TYPE_JSON, ['error' => [
+		return HttpResponse::factory(HttpResponse::TYPE_JSON, array('error' => array(
 			'error_code' => $codes[$error->getCode()],
 			'error_msg' => $error->getMessage(),
 			'critical' => $error->isCritical()
-		]]);
+		)));
 	}
 }

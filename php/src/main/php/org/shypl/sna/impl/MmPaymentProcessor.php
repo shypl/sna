@@ -40,7 +40,7 @@ class MmPaymentProcessor extends PaymentProcessor {
 	 * @return HttpResponse
 	 */
 	public function createHttpResponseSuccess(PaymentRequest $request, $orderId) {
-		return HttpResponse::factory(HttpResponse::TYPE_JSON, ['status' => 1]);
+		return HttpResponse::factory(HttpResponse::TYPE_JSON, array('status' => 1));
 	}
 
 	/**
@@ -52,24 +52,24 @@ class MmPaymentProcessor extends PaymentProcessor {
 		switch ($error->getCode()) {
 			case PaymentException::INVALID_REQUEST:
 			case PaymentException::BAD_REQUEST_PARAMETERS:
-				$r = ['status' => 2, 'error_code' => 700];
+				$r = array('status' => 2, 'error_code' => 700);
 				break;
 
 			case PaymentException::SERVER_ERROR:
 			case PaymentException::SERVER_UNAVAILABLE:
-				$r = ['status' => 0, 'error_code' => 700];
+				$r = array('status' => 0, 'error_code' => 700);
 				break;
 
 			case PaymentException::USER_NOT_FOUND:
-				$r = ['status' => 2, 'error_code' => 701];
+				$r = array('status' => 2, 'error_code' => 701);
 				break;
 
 			case PaymentException::PRODUCT_NOT_FOUND:
-				$r = ['status' => 2, 'error_code' => 702];
+				$r = array('status' => 2, 'error_code' => 702);
 				break;
 
 			default:
-				$r = ['status' => 2, 'error_code' => 700];
+				$r = array('status' => 2, 'error_code' => 700);
 				break;
 		}
 

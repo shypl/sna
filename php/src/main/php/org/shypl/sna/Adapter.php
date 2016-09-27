@@ -15,7 +15,7 @@ interface Adapter {
 	 *
 	 * @return mixed
 	 */
-	public function callApi($method, array $parameters = []);
+	public function callApi($method, array $parameters = array());
 
 	/**
 	 * @param HttpRequest $request

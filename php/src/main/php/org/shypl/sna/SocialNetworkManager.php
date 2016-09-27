@@ -10,7 +10,7 @@ final class SocialNetworkManager {
 	/**
 	 * @var SocialNetwork[]
 	 */
-	private static $networks = [];
+	private static $networks = array();
 
 	/**
 	 * @param SocialNetwork $network
