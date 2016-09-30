@@ -85,7 +85,7 @@ package org.shypl.sna.impl {
 
 		override protected function doMakePayment(id:int, name:String, price:int, handler:MakePaymentHandler):void {
 			if (_handlerMakePayment) {
-				throw new IllegalStateException();
+				_handlerMakePayment.handleMakePaymentResult(false);
 			}
 			_handlerMakePayment = handler;
 
@@ -100,7 +100,7 @@ package org.shypl.sna.impl {
 
 		override protected function doMakeWallPost(post:WallPost, handler:MakeWallPostHandler):void {
 			if (_handlerMakeWallPost) {
-				throw new IllegalStateException();
+				_handlerMakeWallPost.handleMakeWallPostResult(false);
 			}
 			_handlerMakeWallPost = handler;
 
@@ -115,7 +115,7 @@ package org.shypl.sna.impl {
 
 		override protected function doMakeFriendsRequest(userId:String, request:FriendRequest, handler:MakeFriendsRequestHandler):void {
 			if (_handlerMakeFriendsRequest) {
-				throw new IllegalStateException();
+				_handlerMakeFriendsRequest.handleMakeFriendRequestResult(false);
 			}
 			_handlerMakeFriendsRequest = handler;
 			_friendsRequestUserId = userId;
