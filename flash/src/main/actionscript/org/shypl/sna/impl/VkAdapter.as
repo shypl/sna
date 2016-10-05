@@ -64,7 +64,7 @@ package org.shypl.sna.impl {
 		}
 		
 		override protected function doGetUsers(ids:Vector.<String>, receiver:SnUserListReceiver):void {
-			callApi("users.gets", {uids: ids.join(","), fields: USER_FIELDS}, receiver);
+			callApi("users.get", {uids: ids.join(","), fields: USER_FIELDS}, receiver);
 		}
 		
 		override protected function doGetFriends(limit:int, offset:int, receiver:SnUserListReceiver):void {
