@@ -3,6 +3,7 @@ package org.shypl.sna {
 	import flash.external.ExternalInterface;
 
 	import org.shypl.common.collection.NoSuchElementException;
+	import org.shypl.common.lang.ObjectException;
 	import org.shypl.sna.impl.FakeAdapter;
 	import org.shypl.sna.impl.MmSocialNetwork;
 	import org.shypl.sna.impl.OkSocialNetwork;
@@ -42,6 +43,9 @@ package org.shypl.sna {
 		public static function createAdapterByEnvironment(receiver:SocialNetworkAdapterReceiver, stage:Stage):void {
 			if (ExternalInterface.available) {
 				var parameters:Object = ExternalInterface.call("__sna_fap");
+				if (parameters == null || !parameters.nid) {
+					throw new ObjectException(parameters, "Incorrect data for social networks");
+				}
 				getNetworkById(parameters.nid).createAdapter(receiver, stage, parameters);
 			}
 			else {
