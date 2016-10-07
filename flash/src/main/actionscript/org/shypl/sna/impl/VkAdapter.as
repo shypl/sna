@@ -2,6 +2,8 @@ package org.shypl.sna.impl {
 	import flash.display.Stage;
 	import flash.external.ExternalInterface;
 	
+	import org.shypl.common.lang.RuntimeException;
+	
 	import org.shypl.common.logging.LogManager;
 	import org.shypl.common.logging.Logger;
 	import org.shypl.common.util.CollectionUtils;
@@ -157,7 +159,7 @@ package org.shypl.sna.impl {
 						MakeWallPostHandler(handler).handleMakeWallPostResult(false);
 					}
 					else {
-						throw new SnaException("Bad api call: " + data.error.error_msg + " [" + data.error.error_code + "]");
+						throw new RuntimeException("Bad api call: " + data.error.error_msg + " [" + data.error.error_code + "]");
 					}
 				}
 				else {
@@ -175,7 +177,7 @@ package org.shypl.sna.impl {
 				}
 			}
 			catch (e:Error) {
-				throwExceptionDelayed(e is SnaException ? e : new SnaException("Error on handle api callback", e));
+				throwExceptionDelayed(new SnaException("Error on handle api callback", e));
 			}
 		}
 		

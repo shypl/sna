@@ -2,6 +2,8 @@ package org.shypl.sna.impl {
 	import flash.display.Stage;
 	import flash.external.ExternalInterface;
 	
+	import org.shypl.common.lang.RuntimeException;
+	
 	import org.shypl.common.logging.LogManager;
 	import org.shypl.common.logging.Logger;
 	import org.shypl.common.util.CollectionUtils;
@@ -146,11 +148,17 @@ package org.shypl.sna.impl {
 				
 				const handler:Object = getCallbackHandler(callbackId);
 				
-				if (handler is SnUserListReceiver) {
-					SnUserListReceiver(handler).receiverSnUserList(createUserList(data as Array));
+				if (data.error) {
+					throw new RuntimeException("Bad api call: " + data.error.error_msg + " [" + data.error.error_code + "]");
 				}
-				else if (handler is SnUserIdListReceiver) {
-					SnUserIdListReceiver(handler).receiverSnUserIdList(CollectionUtils.arrayToVector(data as Array, String) as Vector.<String>);
+				else {
+					
+					if (handler is SnUserListReceiver) {
+						SnUserListReceiver(handler).receiverSnUserList(createUserList(data as Array));
+					}
+					else if (handler is SnUserIdListReceiver) {
+						SnUserIdListReceiver(handler).receiverSnUserIdList(CollectionUtils.arrayToVector(data as Array, String) as Vector.<String>);
+					}
 				}
 			}
 			catch (e:Error) {
