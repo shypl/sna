@@ -19,7 +19,7 @@ class VkAdapter extends AdapterWithSignedApi {
 
 		$this->apiId = $parameters['apiId'];
 		$this->secretKey = $parameters['secretKey'];
-		$this->testMode = isset($parameters['testMode']) ? boolval($parameters['testMode']) : false;
+		$this->testMode = isset($parameters['testMode']) ? (bool)$parameters['testMode'] : false;
 	}
 
 	/**
