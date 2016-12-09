@@ -9,6 +9,7 @@ package org.shypl.sna.impl {
 	import org.shypl.common.util.CollectionUtils;
 	import org.shypl.common.util.NumberUtils;
 	import org.shypl.sna.AbstractAdapter;
+	import org.shypl.sna.CallResultHandler;
 	import org.shypl.sna.FriendRequest;
 	import org.shypl.sna.MakeFriendsRequestHandler;
 	import org.shypl.sna.MakePaymentHandler;
@@ -106,6 +107,10 @@ package org.shypl.sna.impl {
 			callClient("showRequestBox", [userId, request.message]);
 		}
 		
+		override public function call(method:String, params:Object, handler:CallResultHandler):void {
+			callApi(method, params, handler);
+		}
+		
 		private function callApi(method:String, params:Object, handler:Object):void {
 			try {
 				const callbackId:int = handler == null ? -1 : registerCallbackHandler(handler);
@@ -173,6 +178,9 @@ package org.shypl.sna.impl {
 					}
 					else if (handler is MakeWallPostHandler) {
 						MakeWallPostHandler(handler).handleMakeWallPostResult(!!data);
+					}
+					else if (handler is CallResultHandler) {
+						CallResultHandler(handler).handleCallResult(data);
 					}
 				}
 			}

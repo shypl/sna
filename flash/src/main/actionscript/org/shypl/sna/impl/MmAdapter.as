@@ -3,12 +3,12 @@ package org.shypl.sna.impl {
 	import flash.external.ExternalInterface;
 	
 	import org.shypl.common.lang.RuntimeException;
-	
 	import org.shypl.common.logging.LogManager;
 	import org.shypl.common.logging.Logger;
 	import org.shypl.common.util.CollectionUtils;
 	import org.shypl.common.util.NumberUtils;
 	import org.shypl.sna.AbstractAdapter;
+	import org.shypl.sna.CallResultHandler;
 	import org.shypl.sna.FriendRequest;
 	import org.shypl.sna.MakeFriendsRequestHandler;
 	import org.shypl.sna.MakePaymentHandler;
@@ -62,6 +62,10 @@ package org.shypl.sna.impl {
 		
 		override public function getCurrencyLabelForNumber(number:Number):String {
 			return NumberUtils.defineWordDeclinationRu(number, "мелик", "мейлика", "мейликов");
+		}
+		
+		override public function call(method:String, params:Object, handler:CallResultHandler):void {
+			callApi(method, (params is Array) ? (params as Array) : [params], handler);
 		}
 		
 		override protected function doGetUsers(ids:Vector.<String>, receiver:SnUserListReceiver):void {
@@ -158,6 +162,9 @@ package org.shypl.sna.impl {
 					}
 					else if (handler is SnUserIdListReceiver) {
 						SnUserIdListReceiver(handler).receiverSnUserIdList(CollectionUtils.arrayToVector(data as Array, String) as Vector.<String>);
+					}
+					else if (handler is CallResultHandler) {
+						CallResultHandler(handler).handleCallResult(data);
 					}
 				}
 			}

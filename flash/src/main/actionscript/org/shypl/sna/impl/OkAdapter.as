@@ -6,6 +6,7 @@ package org.shypl.sna.impl {
 	import org.shypl.common.logging.Logger;
 	import org.shypl.common.util.CollectionUtils;
 	import org.shypl.sna.AbstractAdapter;
+	import org.shypl.sna.CallResultHandler;
 	import org.shypl.sna.FriendRequest;
 	import org.shypl.sna.MakeFriendsRequestHandler;
 	import org.shypl.sna.MakePaymentHandler;
@@ -128,6 +129,10 @@ package org.shypl.sna.impl {
 			ExternalInterface.call("FAPI.UI.showNotification", request.message, null, userId);
 		}
 		
+		override public function call(method:String, params:Object, handler:CallResultHandler):void {
+			callApi(method, params, handler);
+		}
+		
 		private function callApi(method:String, params:Object, handler:Object):void {
 			try {
 				const callbackId:int = handler == null ? -1 : registerCallbackHandler(handler);
@@ -161,6 +166,9 @@ package org.shypl.sna.impl {
 				else if (handler is SnUserIdListReceiver) {
 					SnUserIdListReceiver(handler)
 						.receiverSnUserIdList(CollectionUtils.arrayToVector(("uids" in data ? data.uids : data) as Array, String) as Vector.<String>);
+				}
+				else if (handler is CallResultHandler) {
+					CallResultHandler(handler).handleCallResult(data);
 				}
 			}
 			catch (e:Error) {

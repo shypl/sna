@@ -5,7 +5,9 @@ package org.shypl.sna {
 		function get network():SocialNetwork;
 
 		function get sessionUserId():String;
-
+		
+		function call(method:String, params:Object, handler:CallResultHandler):void;
+		
 		function getSessionUser(receiver:SnUserReceiver):void;
 
 		function getUser(id:String, receiver:SnUserReceiver):void;

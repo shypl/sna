@@ -101,6 +101,11 @@ package org.shypl.sna {
 		}
 		
 		[Abstract]
+		public function call(method:String, params:Object, handler:CallResultHandler):void {
+			throw new AbstractMethodException();
+		}
+		
+		[Abstract]
 		public function getCurrencyLabelForNumber(number:Number):String {
 			throw new AbstractMethodException();
 		}
