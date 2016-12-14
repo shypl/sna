@@ -6,16 +6,19 @@ package org.shypl.sna.impl {
 	import org.shypl.sna.SocialNetworkAdapterReceiver;
 	
 	public class FbAdapterCreator extends JsAdapterCreator {
-		public function FbAdapterCreator(receiver:SocialNetworkAdapterReceiver, stage:Stage, sessionUserId:String) {
-			super(receiver, stage, sessionUserId);
+		private var appId:String;
+		
+		public function FbAdapterCreator(receiver:SocialNetworkAdapterReceiver, stage:Stage, sessionUserId:String, appId:String) {
+			super(receiver, stage, sessionUserId, [appId]);
+			this.appId = appId;
 		}
 		
 		override protected function getJsCode():String {
-			return null;
+			return new FbJs().toString();
 		}
 		
 		override protected function getAdapter(stage:Stage, sessionUserId:String):SocialNetworkAdapter {
-			return null;
+			return new FbAdapter(stage, sessionUserId, appId);
 		}
 	}
 }

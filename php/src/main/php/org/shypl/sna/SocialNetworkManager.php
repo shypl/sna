@@ -2,6 +2,7 @@
 namespace org\shypl\sna;
 
 use InvalidArgumentException;
+use org\shypl\sna\impl\FbSocialNetwork;
 use org\shypl\sna\impl\MmSocialNetwork;
 use org\shypl\sna\impl\OkSocialNetwork;
 use org\shypl\sna\impl\VkSocialNetwork;
@@ -51,3 +52,4 @@ final class SocialNetworkManager {
 SocialNetworkManager::registerNetwork(new VkSocialNetwork());
 SocialNetworkManager::registerNetwork(new MmSocialNetwork());
 SocialNetworkManager::registerNetwork(new OkSocialNetwork());
+SocialNetworkManager::registerNetwork(new FbSocialNetwork());
