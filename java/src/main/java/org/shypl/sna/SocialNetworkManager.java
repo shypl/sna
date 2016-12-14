@@ -1,5 +1,6 @@
 package org.shypl.sna;
 
+import org.shypl.sna.impl.FbSocialNetwork;
 import org.shypl.sna.impl.MmSocialNetwork;
 import org.shypl.sna.impl.OkSocialNetwork;
 import org.shypl.sna.impl.VkSocialNetwork;
@@ -17,6 +18,7 @@ public final class SocialNetworkManager {
 		registerNetwork(new VkSocialNetwork());
 		registerNetwork(new MmSocialNetwork());
 		registerNetwork(new OkSocialNetwork());
+		registerNetwork(new FbSocialNetwork());
 	}
 
 	public static void registerNetwork(SocialNetwork network) {
