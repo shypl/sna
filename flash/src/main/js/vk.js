@@ -23,7 +23,9 @@ function __sna(swfId) {
 					VK.addCallback("onRequestFail", function() { swf.__sna_callbackClient("friendsRequest", false); });
 
 					swf.__sna_completeInit();
-				});
+				}, function () {
+					init();
+				}, "5.60");
 			}
 			else {
 				setTimeout(init, 200);
