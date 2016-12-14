@@ -5,6 +5,7 @@ package org.shypl.sna {
 	import org.shypl.common.collection.NoSuchElementException;
 	import org.shypl.common.lang.ObjectException;
 	import org.shypl.sna.impl.FakeAdapter;
+	import org.shypl.sna.impl.FbSocialNetwork;
 	import org.shypl.sna.impl.MmSocialNetwork;
 	import org.shypl.sna.impl.OkSocialNetwork;
 	import org.shypl.sna.impl.VkSocialNetwork;
@@ -16,6 +17,7 @@ package org.shypl.sna {
 			registerNetwork(new VkSocialNetwork());
 			registerNetwork(new MmSocialNetwork());
 			registerNetwork(new OkSocialNetwork());
+			registerNetwork(new FbSocialNetwork());
 		}
 
 		public static function registerNetwork(network:SocialNetwork):void {
