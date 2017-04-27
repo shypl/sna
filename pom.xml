@@ -8,34 +8,7 @@
 	<packaging>pom</packaging>
 
 	<name>SNA</name>
-	<description>Social Network Adapter</description>
-	<url>https://github.com/shypl/sna.git</url>
-
-	<scm>
-		<connection>scm:git:https://github.com/shypl/sna.git</connection>
-		<developerConnection>scm:git:https://github.com/shypl/sna.git</developerConnection>
-		<url>https://github.com/shypl/sna</url>
-		<tag>HEAD</tag>
-	</scm>
-
-	<distributionManagement>
-		<repository>
-			<id>shypl-releases</id>
-			<url>http://nexus.shypl.org/content/repositories/releases/</url>
-		</repository>
-		<snapshotRepository>
-			<id>shypl-snapshots</id>
-			<url>http://nexus.shypl.org/content/repositories/snapshots/</url>
-		</snapshotRepository>
-	</distributionManagement>
-
-	<repositories>
-		<repository>
-			<id>shypl</id>
-			<url>http://nexus.shypl.org/content/groups/public/</url>
-		</repository>
-	</repositories>
-
+	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -46,36 +19,32 @@
 		<module>php</module>
 	</modules>
 	
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
-				<version>2.5.3</version>
-				<configuration>
-					<mavenExecutorId>forked-path</mavenExecutorId>
-					<useReleaseProfile>false</useReleaseProfile>
-					<tagNameFormat>@{project.version}</tagNameFormat>
-					<autoVersionSubmodules>true</autoVersionSubmodules>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+	<distributionManagement>
+		<repository>
+			<id>capjack-releases</id>
+			<url>http://nexus.capjack.ru/repository/public-releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>capjack-snapshots</id>
+			<url>http://nexus.capjack.ru/repository/public-snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 	
+	<repositories>
+		<repository>
+			<id>capjack</id>
+			<url>http://nexus.capjack.ru/repository/public</url>
+		</repository>
+	</repositories>
 	
-	<licenses>
-		<license>
-			<name>The Apache Software License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
-
-	<developers>
-		<developer>
-			<id>shnyaka</id>
-			<name>Alexey Chuprina</name>
-			<email>shnyaka@gmail.com</email>
-		</developer>
-	</developers>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>capjack</id>
+			<url>http://nexus.capjack.ru/repository/public</url>
+		</pluginRepository>
+		<pluginRepository>
+			<id>mvnrepository</id>
+			<url>https://mvnrepository.com/artifact</url>
+		</pluginRepository>
+	</pluginRepositories>
 </project>

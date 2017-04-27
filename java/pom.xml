@@ -22,7 +22,7 @@
 		<dependency>
 			<groupId>org.shypl.common</groupId>
 			<artifactId>common-java</artifactId>
-			<version>1.0.2-SNAPSHOT</version>
+			<version>1.0.5-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 
