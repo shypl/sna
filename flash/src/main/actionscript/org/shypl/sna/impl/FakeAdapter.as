@@ -49,7 +49,7 @@ package org.shypl.sna.impl {
 			receiver.receiverSnUserIdList(new Vector.<String>(0, true));
 		}
 		
-		public function inviteFriends():void {
+		public function inviteFriends(message:String):void {
 		}
 		
 		public function makePayment(id:int, name:String, price:int, handler:MakePaymentHandler):void {

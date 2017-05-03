@@ -3,7 +3,7 @@ function __sna(swfId, appId) {
 	var swf = document.getElementById(swfId);
 	
 	// init
-	(function() {
+	(function () {
 		var script = document.createElement("script");
 		script.src = "//connect.facebook.net/en_US/sdk.js";
 		document.getElementsByTagName('head')[0].appendChild(script);
@@ -11,9 +11,8 @@ function __sna(swfId, appId) {
 		window.fbAsyncInit = function () {
 			FB.init({
 				appId: appId,
-				cookie: true,
-				status: true,
-				version: 'v2.8'
+				xfbml: true,
+				version: 'v2.9'
 			});
 			
 			FB.getLoginStatus(onLogin);
@@ -28,9 +27,9 @@ function __sna(swfId, appId) {
 		}
 	})();
 	
-	window.__sna_api = function(path, method, params, callbackId) {
+	window.__sna_api = function (path, method, params, callbackId) {
 		try {
-			FB.api("/" + path, method, params, function(data) {
+			FB.api("/" + path, method, params, function (data) {
 				swf.__sna_api(callbackId, data);
 			});
 		}
@@ -43,7 +42,7 @@ function __sna(swfId, appId) {
 	
 	window.__sna_ui = function (params, callbackId) {
 		try {
-			FB.ui(params, function(data) {
+			FB.ui(params, function (data) {
 				swf.__sna_ui(callbackId, data);
 			});
 		}

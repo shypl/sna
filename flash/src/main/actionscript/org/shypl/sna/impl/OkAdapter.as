@@ -65,6 +65,10 @@ package org.shypl.sna.impl {
 			return "ок";
 		}
 		
+		override public function call(method:String, params:Object, handler:CallResultHandler):void {
+			callApi(method, params, handler);
+		}
+		
 		override protected function doGetUsers(ids:Vector.<String>, receiver:SnUserListReceiver):void {
 			callApi("users.getInfo", {uids: ids.join(","), fields: USER_FIELDS, emptyPictures: false}, receiver);
 		}
@@ -77,7 +81,7 @@ package org.shypl.sna.impl {
 			callApi("friends.getAppUsers", null, receiver);
 		}
 		
-		override protected function doInviteFriends():void {
+		override protected function doInviteFriends(message:String):void {
 			logger.debug("invite friends >");
 			closeFullScreen();
 			ExternalInterface.call("FAPI.UI.showInvite");
@@ -127,10 +131,6 @@ package org.shypl.sna.impl {
 				handleFriendsRequestCallback(false, null);
 			});
 			ExternalInterface.call("FAPI.UI.showNotification", request.message, null, userId);
-		}
-		
-		override public function call(method:String, params:Object, handler:CallResultHandler):void {
-			callApi(method, params, handler);
 		}
 		
 		private function callApi(method:String, params:Object, handler:Object):void {

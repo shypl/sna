@@ -3,7 +3,6 @@ package org.shypl.sna.impl {
 	import flash.external.ExternalInterface;
 	
 	import org.shypl.common.lang.RuntimeException;
-	
 	import org.shypl.common.logging.LogManager;
 	import org.shypl.common.logging.Logger;
 	import org.shypl.common.util.CollectionUtils;
@@ -66,6 +65,10 @@ package org.shypl.sna.impl {
 			return NumberUtils.defineWordDeclinationRu(number, "голос", "голоса", "голосов");
 		}
 		
+		override public function call(method:String, params:Object, handler:CallResultHandler):void {
+			callApi(method, params, handler);
+		}
+		
 		override protected function doGetUsers(ids:Vector.<String>, receiver:SnUserListReceiver):void {
 			callApi("users.get", {uids: ids.join(","), fields: USER_FIELDS}, receiver);
 		}
@@ -78,7 +81,7 @@ package org.shypl.sna.impl {
 			callApi("friends.getAppUsers", null, receiver);
 		}
 		
-		override protected function doInviteFriends():void {
+		override protected function doInviteFriends(message:String):void {
 			closeFullScreen();
 			callClient("showInviteBox");
 		}
@@ -105,10 +108,6 @@ package org.shypl.sna.impl {
 			
 			closeFullScreen();
 			callClient("showRequestBox", [userId, request.message]);
-		}
-		
-		override public function call(method:String, params:Object, handler:CallResultHandler):void {
-			callApi(method, params, handler);
 		}
 		
 		private function callApi(method:String, params:Object, handler:Object):void {

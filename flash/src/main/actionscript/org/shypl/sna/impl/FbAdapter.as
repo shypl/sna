@@ -18,7 +18,7 @@ package org.shypl.sna.impl {
 	
 	public class FbAdapter extends AbstractAdapter {
 		private static const LOGGER:Logger = LogManager.getLogger(FbAdapter);
-
+		
 		private static function createUser(data:Object):SnUser {
 			try {
 				var avatar:String = null;
@@ -81,14 +81,14 @@ package org.shypl.sna.impl {
 			callApi("me/friends", "get", {fields: "id"}, receiver);
 		}
 		
-		override protected function doInviteFriends():void {
+		override protected function doInviteFriends(message:String):void {
 			closeFullScreen();
-			callUi({method: "apprequests"}, null);
+			callUi({method: "apprequests", message: message}, null);
 		}
 		
 		override protected function doMakeFriendsRequest(userId:String, request:FriendRequest, handler:MakeFriendsRequestHandler):void {
 			closeFullScreen();
-			callUi({method: "send", link: "https://apps.facebook.com/" + _appId, to: userId}, null);
+			callUi({method: "apprequests", to: userId, message: request.message}, null);
 			handler.handleMakeFriendRequestResult(true);
 		}
 		
@@ -130,7 +130,7 @@ package org.shypl.sna.impl {
 				var callback:Object = getCallbackHandler(callbackId);
 				
 				if (data.error) {
-					throw new RuntimeException("Bad api call: " + data.error.message);
+					throw new RuntimeException("Bad API call: " + data.error.message);
 				}
 				else {
 					if (callback is SnUserListReceiver) {
@@ -142,7 +142,7 @@ package org.shypl.sna.impl {
 				}
 			}
 			catch (e:Error) {
-				throwExceptionDelayed(new SnaException("Error on handle api callback", e));
+				LOGGER.warn("Error on handle API callback", e);
 			}
 		}
 		
@@ -154,15 +154,12 @@ package org.shypl.sna.impl {
 				
 				var callback:Object = getCallbackHandler(callbackId);
 				
-				if (data.error_message) {
-					throw new RuntimeException("Bad api call: " + data.error_message);
-				}
-				else {
-					
+				if (data && data.error_message) {
+					throw new RuntimeException("Bad UI call: " + data.error_message);
 				}
 			}
 			catch (e:Error) {
-				throwExceptionDelayed(new SnaException("Error on handle api callback", e));
+				LOGGER.warn("Error on handle UI callback", e);
 			}
 		}
 	}

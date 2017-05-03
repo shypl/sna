@@ -84,7 +84,7 @@ package org.shypl.sna {
 			pushCall(doGetAppFriendIds, arguments);
 		}
 		
-		public final function inviteFriends():void {
+		public final function inviteFriends(message:String):void {
 			pushCall(doInviteFriends, arguments);
 		}
 		
@@ -159,7 +159,7 @@ package org.shypl.sna {
 		}
 		
 		[Abstract]
-		protected function doInviteFriends():void {
+		protected function doInviteFriends(message:String):void {
 			throw new AbstractMethodException();
 		}
 		

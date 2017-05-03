@@ -80,7 +80,7 @@ package org.shypl.sna.impl {
 			callApi("common.friends.getAppUsers", null, receiver);
 		}
 		
-		override protected function doInviteFriends():void {
+		override protected function doInviteFriends(message:String):void {
 			closeFullScreen();
 			callApi("app.friends.invite", null, null);
 		}

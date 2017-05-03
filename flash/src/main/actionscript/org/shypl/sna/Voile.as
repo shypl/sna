@@ -1,5 +1,4 @@
 package org.shypl.sna {
-	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.display.Stage;
 	import flash.events.MouseEvent;
