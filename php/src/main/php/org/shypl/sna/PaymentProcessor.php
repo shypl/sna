@@ -8,7 +8,7 @@ use org\shypl\common\net\HttpRequest;
 use org\shypl\common\net\HttpResponse;
 
 abstract class PaymentProcessor {
-	private $adapter;
+	protected $adapter;
 	protected $delegate;
 
 	/**
@@ -86,9 +86,9 @@ abstract class PaymentProcessor {
 		$paymentRequest = $this->createPaymentRequest($httpRequest);
 		$product = $this->delegate->getPaymentProduct($paymentRequest);
 
-		if ($product->getPrice() !== $paymentRequest->getProductPrice()) {
-			throw new PaymentException(PaymentException::PRODUCT_NOT_FOUND);
-		}
+//		if ($product->getPrice() !== $paymentRequest->getProductPrice()) {
+//			throw new PaymentException(PaymentException::PRODUCT_NOT_FOUND);
+//		}
 
 		$orderId = $this->delegate->buyPaymentProduct($paymentRequest, $product);
 

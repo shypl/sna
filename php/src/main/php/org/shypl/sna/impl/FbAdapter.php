@@ -9,8 +9,8 @@ use org\shypl\sna\PaymentProcessorDelegate;
 
 class FbAdapter extends AbstractAdapter
 {
-	private $appId;
-	private $secretKey;
+	public $appId;
+	public $secretKey;
 	
 	public function __construct(array $parameters) {
 		parent::__construct(FbSocialNetwork::ID, '');
@@ -20,7 +20,7 @@ class FbAdapter extends AbstractAdapter
 	}
 	
 	public function createPaymentProcessor(PaymentProcessorDelegate $delegate) {
-		
+		return new FbPaymentProcessor($this, $delegate);
 	}
 	
 	protected function defineApiRequestParameters($method, array $parameters) {
@@ -54,14 +54,17 @@ class FbAdapter extends AbstractAdapter
 	 * @return bool
 	 */
 	public function validateRequest(HttpRequest $request) {
-		return $this->parseRequest($request) != null;
+		return $this->parseRequest($request) != null
+			|| FbPaymentProcessor::isProductRequest($request)
+			|| FbPaymentProcessor::isHubModeSubscribeRequest($request)
+			|| count($request->getParameters()) == 0;
 	}
 	
 	private function base64_url_decode($input) {
 		return base64_decode(strtr($input, '-_', '+/'));
 	}
 	
-	private function parseRequest(HttpRequest $request) {
+	public function parseRequest(HttpRequest $request) {
 		$signedRequest = explode('.', $request->getParameter('signed_request'), 2);
 		
 		if (!empty($signedRequest) && count($signedRequest) == 2) {

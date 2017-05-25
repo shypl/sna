@@ -10,6 +10,7 @@ package org.shypl.sna.impl {
 	import org.shypl.sna.CallResultHandler;
 	import org.shypl.sna.FriendRequest;
 	import org.shypl.sna.MakeFriendsRequestHandler;
+	import org.shypl.sna.MakePaymentHandler;
 	import org.shypl.sna.SnUser;
 	import org.shypl.sna.SnUserGender;
 	import org.shypl.sna.SnUserIdListReceiver;
@@ -17,6 +18,8 @@ package org.shypl.sna.impl {
 	import org.shypl.sna.SnaException;
 	
 	public class FbAdapter extends AbstractAdapter {
+		public static var paymentBaseUrl:String;
+		
 		private static const LOGGER:Logger = LogManager.getLogger(FbAdapter);
 		
 		private static function createUser(data:Object):SnUser {
@@ -41,6 +44,10 @@ package org.shypl.sna.impl {
 		}
 		
 		private static function createUserList(map:Object):Vector.<SnUser> {
+			if ('data' in map) {
+				map = map.data;
+			}
+			
 			const list:Vector.<SnUser> = new Vector.<SnUser>();
 			for each (var data:Object in map) {
 				list.push(createUser(data));
@@ -56,11 +63,8 @@ package org.shypl.sna.impl {
 			return list;
 		}
 		
-		private var _appId:String;
-		
 		public function FbAdapter(stage:Stage, sessionUserId:String, appId:String) {
 			super(4, 50, stage, sessionUserId);
-			_appId = appId;
 			ExternalInterface.addCallback("__sna_api", handleApiCallback);
 			ExternalInterface.addCallback("__sna_ui", handleUiCallback);
 		}
@@ -81,6 +85,10 @@ package org.shypl.sna.impl {
 			callApi("me/friends", "get", {fields: "id"}, receiver);
 		}
 		
+		override protected function doGetFriends(limit:int, offset:int, receiver:SnUserListReceiver):void {
+			callApi("me/friends", "get", {fields: "id,first_name,last_name,gender,picture"}, receiver);
+		}
+		
 		override protected function doInviteFriends(message:String):void {
 			closeFullScreen();
 			callUi({method: "apprequests", message: message}, null);
@@ -90,6 +98,10 @@ package org.shypl.sna.impl {
 			closeFullScreen();
 			callUi({method: "apprequests", to: userId, message: request.message}, null);
 			handler.handleMakeFriendRequestResult(true);
+		}
+		
+		override protected function doMakePayment(id:int, name:String, price:int, handler:MakePaymentHandler):void {
+			callUi({method: "pay", action: "purchaseitem", product: paymentBaseUrl + "/fb/pay/product/" + id}, handler);
 		}
 		
 		private function callApi(path:String, method:String, params:Object, callback:Object):void {
@@ -138,6 +150,9 @@ package org.shypl.sna.impl {
 					}
 					else if (callback is SnUserIdListReceiver) {
 						SnUserIdListReceiver(callback).receiverSnUserIdList(extractSnUserIdList(data));
+					}
+					else if (callback is MakePaymentHandler) {
+						MakePaymentHandler(callback).handleMakePaymentResult(data.status == "completed");
 					}
 				}
 			}
