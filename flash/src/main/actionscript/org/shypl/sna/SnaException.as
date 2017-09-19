@@ -1,5 +1,5 @@
 package org.shypl.sna {
-	import org.shypl.common.lang.RuntimeException;
+	import ru.capjack.flacy.core.errors.RuntimeException;
 	
 	public class SnaException extends RuntimeException {
 		public function SnaException(message:String, cause:Error = null) {

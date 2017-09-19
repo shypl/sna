@@ -1,5 +1,4 @@
 package org.shypl.sna.impl {
-	import org.shypl.common.util.NumberUtils;
 	import org.shypl.sna.CallResultHandler;
 	import org.shypl.sna.FriendRequest;
 	import org.shypl.sna.MakeFriendsRequestHandler;
@@ -12,6 +11,8 @@ package org.shypl.sna.impl {
 	import org.shypl.sna.SocialNetwork;
 	import org.shypl.sna.SocialNetworkAdapter;
 	import org.shypl.sna.WallPost;
+	
+	import ru.capjack.flacy.core.utils.Numbers;
 	
 	public class FakeAdapter implements SocialNetworkAdapter {
 		public function get available():Boolean {
@@ -65,7 +66,7 @@ package org.shypl.sna.impl {
 		}
 		
 		public function getCurrencyLabelForNumber(number:Number):String {
-			return NumberUtils.defineWordDeclinationRu(number, "монета", "монеты", "монет");
+			return Numbers.defineWordDeclinationRu(number, "монета", "монеты", "монет");
 		}
 	}
 }

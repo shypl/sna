@@ -1,13 +1,9 @@
 package org.shypl.sna {
-	import org.shypl.common.lang.Enum;
+	import ru.capjack.flacy.core.Enum;
 	
 	public final class SnUserGender extends Enum {
-		public static const UNDEFINED:SnUserGender = new SnUserGender("UNDEFINED");
-		public static const MALE:SnUserGender = new SnUserGender("MALE");
-		public static const FEMALE:SnUserGender = new SnUserGender("FEMALE");
-		
-		public function SnUserGender(name:String) {
-			super(name);
-		}
+		public static const UNDEFINED:SnUserGender = new SnUserGender();
+		public static const MALE:SnUserGender = new SnUserGender();
+		public static const FEMALE:SnUserGender = new SnUserGender();
 	}
 }

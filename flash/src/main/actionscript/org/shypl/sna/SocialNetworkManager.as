@@ -2,13 +2,14 @@ package org.shypl.sna {
 	import flash.display.Stage;
 	import flash.external.ExternalInterface;
 	
-	import org.shypl.common.collection.NoSuchElementException;
-	import org.shypl.common.lang.ObjectException;
 	import org.shypl.sna.impl.FakeAdapter;
 	import org.shypl.sna.impl.FbSocialNetwork;
 	import org.shypl.sna.impl.MmSocialNetwork;
 	import org.shypl.sna.impl.OkSocialNetwork;
 	import org.shypl.sna.impl.VkSocialNetwork;
+	
+	import ru.capjack.flacy.core.collections.NoSuchElementException;
+	import ru.capjack.flacy.core.errors.RuntimeException;
 	
 	public final class SocialNetworkManager {
 		private static const _networks:Vector.<SocialNetwork> = new Vector.<SocialNetwork>();
@@ -46,7 +47,7 @@ package org.shypl.sna {
 			if (ExternalInterface.available) {
 				var parameters:Object = ExternalInterface.call("__sna_fap");
 				if (parameters == null || !parameters.nid) {
-					throw new ObjectException(parameters, "Incorrect data for social networks");
+					throw new RuntimeException("Incorrect data for social networks");
 				}
 				getNetworkById(parameters.nid).createAdapter(receiver, stage, parameters);
 			}

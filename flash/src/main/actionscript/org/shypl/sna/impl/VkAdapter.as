@@ -2,11 +2,6 @@ package org.shypl.sna.impl {
 	import flash.display.Stage;
 	import flash.external.ExternalInterface;
 	
-	import org.shypl.common.lang.RuntimeException;
-	import org.shypl.common.logging.LogManager;
-	import org.shypl.common.logging.Logger;
-	import org.shypl.common.util.CollectionUtils;
-	import org.shypl.common.util.NumberUtils;
 	import org.shypl.sna.AbstractAdapter;
 	import org.shypl.sna.CallResultHandler;
 	import org.shypl.sna.FriendRequest;
@@ -20,8 +15,16 @@ package org.shypl.sna.impl {
 	import org.shypl.sna.SnaException;
 	import org.shypl.sna.WallPost;
 	
+	import ru.capjack.flacy.core.errors.RuntimeException;
+	import ru.capjack.flacy.core.utils.Arrays;
+	
+	import ru.capjack.flacy.core.utils.Numbers;
+	
+	import ru.capjack.flacy.tools.logging.Logger;
+	import ru.capjack.flacy.tools.logging.Logging;
+	
 	public class VkAdapter extends AbstractAdapter {
-		private static const LOGGER:Logger = LogManager.getLogger(VkAdapter);
+		private static const LOGGER:Logger = Logging.getLogger(VkAdapter);
 		
 		private static const USER_FIELDS:String = "uid,first_name,last_name,photo_100,sex";
 		
@@ -62,7 +65,7 @@ package org.shypl.sna.impl {
 		}
 		
 		override public function getCurrencyLabelForNumber(number:Number):String {
-			return NumberUtils.defineWordDeclinationRu(number, "голос", "голоса", "голосов");
+			return Numbers.defineWordDeclinationRu(number, "голос", "голоса", "голосов");
 		}
 		
 		override public function call(method:String, params:Object, handler:CallResultHandler):void {
@@ -173,7 +176,7 @@ package org.shypl.sna.impl {
 						SnUserListReceiver(handler).receiverSnUserList(createUserList(data as Array));
 					}
 					else if (handler is SnUserIdListReceiver) {
-						SnUserIdListReceiver(handler).receiverSnUserIdList(CollectionUtils.arrayToVector(data as Array, String) as Vector.<String>);
+						SnUserIdListReceiver(handler).receiverSnUserIdList(Arrays.convertToVector(data as Array, String) as Vector.<String>);
 					}
 					else if (handler is MakeWallPostHandler) {
 						MakeWallPostHandler(handler).handleMakeWallPostResult(!!data);

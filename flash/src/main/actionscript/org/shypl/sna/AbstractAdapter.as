@@ -3,12 +3,12 @@ package org.shypl.sna {
 	import flash.display.StageDisplayState;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
+	import flash.utils.setTimeout;
 	
-	import org.shypl.common.collection.LinkedList;
-	import org.shypl.common.lang.AbstractMethodException;
-	import org.shypl.common.lang.isNull;
-	import org.shypl.common.lang.notNull;
-	import org.shypl.common.timeline.GlobalTimeline;
+	import ru.capjack.flacy.core.collections.Deque;
+	import ru.capjack.flacy.core.collections.LinkedDeque;
+	import ru.capjack.flacy.core.errors.AbstractMethodException;
+	import ru.capjack.flacy.tools.timeline.GlobalTimeline;
 	
 	public class AbstractAdapter implements SocialNetworkAdapter {
 		private var _network:SocialNetwork;
@@ -16,7 +16,7 @@ package org.shypl.sna {
 		private var _stage:Stage;
 		
 		private var _getUsersLimit:int;
-		private var _callQueue:LinkedList = new LinkedList();
+		private var _callQueue:Deque = new LinkedDeque();
 		private var _callTimer:Timer = new Timer(400, 1);
 		private var _lastCallbackHandlerId:int = 0;
 		private var _callbackHandlers:Object = {};
@@ -126,18 +126,18 @@ package org.shypl.sna {
 		
 		protected final function closeFullScreen():void {
 			if (_stage.displayState != StageDisplayState.NORMAL) {
-				_stage.displayState = StageDisplayState.NORMAL
+				_stage.displayState = StageDisplayState.NORMAL;
 			}
 		}
 		
 		protected final function showVoile(callback:Function):void {
-			if (isNull(_voile)) {
+			if (_voile == null) {
 				_voile = new Voile(_stage, callback);
 			}
 		}
 		
 		protected final function hideVoile():void {
-			if (notNull(_voile)) {
+			if (_voile != null) {
 				_voile.hide();
 				_voile = null;
 			}
@@ -179,7 +179,7 @@ package org.shypl.sna {
 		}
 		
 		protected function throwExceptionDelayed(e:Error):void {
-			GlobalTimeline.forNextFrame(function throwExceptionClosure():void {
+			GlobalTimeline.scheduleForNextFrame(function throwExceptionClosure():void {
 				throw e;
 			});
 		}
@@ -190,7 +190,7 @@ package org.shypl.sna {
 				runCallTimer();
 			}
 			else {
-				_callQueue.add(new CallQueueItem(method, args));
+				_callQueue.addLast(new CallQueueItem(method, args));
 			}
 		}
 		

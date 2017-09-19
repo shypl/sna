@@ -3,9 +3,8 @@ package org.shypl.sna {
 	import flash.display.Stage;
 	import flash.events.MouseEvent;
 	
-	import org.shypl.common.lang.notNull;
-	import org.shypl.common.timeline.GlobalTimeline;
-	import org.shypl.common.util.Cancelable;
+	import ru.capjack.flacy.core.Cancelable;
+	import ru.capjack.flacy.tools.timeline.GlobalTimeline;
 	
 	internal class Voile {
 		private var _view:Sprite = new Sprite();
@@ -28,7 +27,7 @@ package org.shypl.sna {
 		}
 		
 		public function hide():void {
-			if (notNull(_stage)) {
+			if (_stage != null) {
 				cancelTimer();
 				stopListenMouse();
 				_stage.removeChild(_view);
@@ -39,7 +38,7 @@ package org.shypl.sna {
 		}
 		
 		private function cancelTimer():void {
-			if (notNull(_timer)) {
+			if (_timer != null) {
 				_timer.cancel();
 				_timer = null;
 			}
@@ -58,7 +57,7 @@ package org.shypl.sna {
 		}
 		
 		private function callCallback():void {
-			if (notNull(_callback)) {
+			if (_callback != null) {
 				_callback.apply();
 			}
 		}

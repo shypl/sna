@@ -4,7 +4,7 @@
 
 	<groupId>org.shypl.sna</groupId>
 	<artifactId>sna-parent</artifactId>
-	<version>1.1.0-SNAPSHOT</version>
+	<version>1.2.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>SNA</name>
@@ -21,11 +21,11 @@
 	
 	<distributionManagement>
 		<repository>
-			<id>capjack-releases</id>
+			<id>capjack</id>
 			<url>http://artifactory-guts.capjack.ru/public-releases</url>
 		</repository>
 		<snapshotRepository>
-			<id>capjack-snapshots</id>
+			<id>capjack</id>
 			<url>http://artifactory-guts.capjack.ru/public-snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>

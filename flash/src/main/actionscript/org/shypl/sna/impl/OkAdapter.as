@@ -2,9 +2,6 @@ package org.shypl.sna.impl {
 	import flash.display.Stage;
 	import flash.external.ExternalInterface;
 	
-	import org.shypl.common.logging.LogManager;
-	import org.shypl.common.logging.Logger;
-	import org.shypl.common.util.CollectionUtils;
 	import org.shypl.sna.AbstractAdapter;
 	import org.shypl.sna.CallResultHandler;
 	import org.shypl.sna.FriendRequest;
@@ -18,8 +15,13 @@ package org.shypl.sna.impl {
 	import org.shypl.sna.SnaException;
 	import org.shypl.sna.WallPost;
 	
+	import ru.capjack.flacy.core.utils.Arrays;
+	
+	import ru.capjack.flacy.tools.logging.Logger;
+	import ru.capjack.flacy.tools.logging.Logging;
+	
 	public class OkAdapter extends AbstractAdapter {
-		private static const logger:Logger = LogManager.getLogger(OkAdapter);
+		private static const logger:Logger = Logging.getLogger(OkAdapter);
 		private static const USER_FIELDS:String = "uid,first_name,last_name,pic128x128,gender";
 		
 		private static function createUser(data:Object):SnUser {
@@ -165,7 +167,7 @@ package org.shypl.sna.impl {
 				}
 				else if (handler is SnUserIdListReceiver) {
 					SnUserIdListReceiver(handler)
-						.receiverSnUserIdList(CollectionUtils.arrayToVector(("uids" in data ? data.uids : data) as Array, String) as Vector.<String>);
+						.receiverSnUserIdList(Arrays.convertToVector(("uids" in data ? data.uids : data) as Array, String) as Vector.<String>);
 				}
 				else if (handler is CallResultHandler) {
 					CallResultHandler(handler).handleCallResult(data);

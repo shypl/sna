@@ -1,7 +1,7 @@
 package org.shypl.sna {
 	import flash.display.Stage;
 	
-	import org.shypl.common.lang.AbstractMethodException;
+	import ru.capjack.flacy.core.errors.AbstractMethodException;
 	
 	[Abstract]
 	public class SocialNetwork {

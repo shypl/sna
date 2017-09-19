@@ -1,5 +1,5 @@
 package org.shypl.sna {
-	import org.shypl.common.util.StringUtils;
+	import ru.capjack.flacy.core.utils.Strings;
 	
 	public class SnUser {
 		private var _id:String;
@@ -29,7 +29,7 @@ package org.shypl.sna {
 		}
 		
 		public function get name():String {
-			return StringUtils.trim(_firstName + " " + _lastName);
+			return Strings.trim(_firstName + " " + _lastName);
 		}
 		
 		public function get avatar():String {
