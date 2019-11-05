@@ -9,7 +9,7 @@ package org.shypl.sna.impl {
 			super(3, "ok");
 		}
 		
-		override public function createAdapter(receiver:SocialNetworkAdapterReceiver, stage:Stage, parameters:Object):void {
+		override public function createAdapter(receiver: SocialNetworkAdapterReceiver, stage: Stage, parameters: Object): void {
 			new OkAdapterCreator(receiver, stage, parameters.uid);
 		}
 	}

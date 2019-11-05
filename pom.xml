@@ -4,7 +4,7 @@
 
 	<groupId>org.shypl.sna</groupId>
 	<artifactId>sna-parent</artifactId>
-	<version>1.2.0-SNAPSHOT</version>
+	<version>1.3.0</version>
 	<packaging>pom</packaging>
 
 	<name>SNA</name>
@@ -16,31 +16,30 @@
 	<modules>
 		<module>java</module>
 		<module>flash</module>
-		<module>php</module>
 	</modules>
 	
 	<distributionManagement>
 		<repository>
 			<id>capjack</id>
-			<url>http://artifactory-guts.capjack.ru/public-releases</url>
+			<url>http://artifactory.capjack.ru/public-releases</url>
 		</repository>
 		<snapshotRepository>
 			<id>capjack</id>
-			<url>http://artifactory-guts.capjack.ru/public-snapshots</url>
+			<url>http://artifactory.capjack.ru/public-snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
 	
 	<repositories>
 		<repository>
 			<id>capjack</id>
-			<url>http://artifactory-guts.capjack.ru/public</url>
+			<url>http://artifactory.capjack.ru/public</url>
 		</repository>
 	</repositories>
 	
 	<pluginRepositories>
 		<pluginRepository>
 			<id>capjack</id>
-			<url>http://artifactory-guts.capjack.ru/public</url>
+			<url>http://artifactory.capjack.ru/public</url>
 		</pluginRepository>
 	</pluginRepositories>
 </project>

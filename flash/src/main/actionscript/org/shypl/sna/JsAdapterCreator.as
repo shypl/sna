@@ -2,16 +2,16 @@ package org.shypl.sna {
 	import flash.display.Stage;
 	import flash.external.ExternalInterface;
 	
-	import ru.capjack.flacy.core.errors.AbstractMethodException;
+	import org.shypl.common.lang.AbstractMethodException;
 	
 	[Abstract]
 	public class JsAdapterCreator {
-		private var _receiver:SocialNetworkAdapterReceiver;
-		private var _stage:Stage;
-		private var _sessionUserId:String;
-		private var _jsArgs:Array;
+		private var _receiver: SocialNetworkAdapterReceiver;
+		private var _stage: Stage;
+		private var _sessionUserId: String;
+		private var _jsArgs: Array;
 		
-		public function JsAdapterCreator(receiver:SocialNetworkAdapterReceiver, stage:Stage, sessionUserId:String, jsArgs:Array = null) {
+		public function JsAdapterCreator(receiver: SocialNetworkAdapterReceiver, stage: Stage, sessionUserId: String, jsArgs: Array = null) {
 			_receiver = receiver;
 			_stage = stage;
 			_sessionUserId = sessionUserId;
@@ -20,37 +20,37 @@ package org.shypl.sna {
 			try {
 				start();
 			}
-			catch (e:Error) {
+			catch (e: Error) {
 				new SnaException("Сan not create adapter", e);
 			}
 		}
 		
 		[Abstract]
-		protected function getJsCode():String {
+		protected function getJsCode(): String {
 			throw new AbstractMethodException();
 		}
 		
 		[Abstract]
-		protected function getAdapter(stage:Stage, sessionUserId:String):SocialNetworkAdapter {
+		protected function getAdapter(stage: Stage, sessionUserId: String): SocialNetworkAdapter {
 			throw new AbstractMethodException();
 		}
 		
-		private function start():void {
+		private function start(): void {
 			ExternalInterface.addCallback("__sna_completeInit", complete);
 			
-			var args:Array = [
+			var args: Array = [
 				getJsCode(),
 				ExternalInterface.objectID
 			];
 			
-			for each (var arg:Object in _jsArgs) {
+			for each (var arg: Object in _jsArgs) {
 				args.push(arg);
 			}
 			
 			ExternalInterface.call.apply(null, args);
 		}
 		
-		private function complete():void {
+		private function complete(): void {
 			if (_receiver != null) {
 				_receiver.receiveSocialNetworkAdapter(getAdapter(_stage, _sessionUserId));
 				_receiver = null;

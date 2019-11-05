@@ -9,7 +9,7 @@ package org.shypl.sna.impl {
 			super(4, "fb");
 		}
 		
-		override public function createAdapter(receiver:SocialNetworkAdapterReceiver, stage:Stage, parameters:Object):void {
+		override public function createAdapter(receiver: SocialNetworkAdapterReceiver, stage: Stage, parameters: Object): void {
 			new FbAdapterCreator(receiver, stage, parameters.uid, parameters.aid);
 		}
 	}

@@ -3,16 +3,17 @@ package org.shypl.sna {
 	import flash.display.Stage;
 	import flash.events.MouseEvent;
 	
-	import ru.capjack.flacy.core.Cancelable;
-	import ru.capjack.flacy.tools.timeline.GlobalTimeline;
+	import org.shypl.common.timeline.GlobalTimeline;
+	
+	import org.shypl.common.util.Cancelable;
 	
 	internal class Voile {
-		private var _view:Sprite = new Sprite();
-		private var _stage:Stage;
-		private var _callback:Function;
-		private var _timer:Cancelable;
+		private var _view: Sprite = new Sprite();
+		private var _stage: Stage;
+		private var _callback: Function;
+		private var _timer: Cancelable;
 		
-		public function Voile(stage:Stage, callback:Function) {
+		public function Voile(stage: Stage, callback: Function) {
 			_stage = stage;
 			_callback = callback;
 			
@@ -26,7 +27,7 @@ package org.shypl.sna {
 			_timer = GlobalTimeline.schedule(1000, startListenMouse);
 		}
 		
-		public function hide():void {
+		public function hide(): void {
 			if (_stage != null) {
 				cancelTimer();
 				stopListenMouse();
@@ -37,32 +38,32 @@ package org.shypl.sna {
 			}
 		}
 		
-		private function cancelTimer():void {
+		private function cancelTimer(): void {
 			if (_timer != null) {
 				_timer.cancel();
 				_timer = null;
 			}
 		}
 		
-		private function startListenMouse():void {
+		private function startListenMouse(): void {
 			_stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseEvent);
 			_stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseEvent);
 			_stage.addEventListener(MouseEvent.MOUSE_UP, onMouseEvent);
 		}
 		
-		private function stopListenMouse():void {
+		private function stopListenMouse(): void {
 			_stage.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseEvent);
 			_stage.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseEvent);
 			_stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseEvent);
 		}
 		
-		private function callCallback():void {
+		private function callCallback(): void {
 			if (_callback != null) {
 				_callback.apply();
 			}
 		}
 		
-		private function onMouseEvent(event:MouseEvent):void {
+		private function onMouseEvent(event: MouseEvent): void {
 			stopListenMouse();
 			_timer = GlobalTimeline.schedule(1000, callCallback);
 		}

@@ -9,7 +9,7 @@ package org.shypl.sna.impl {
 			super(2, "mm");
 		}
 		
-		override public function createAdapter(receiver:SocialNetworkAdapterReceiver, stage:Stage, parameters:Object):void {
+		override public function createAdapter(receiver: SocialNetworkAdapterReceiver, stage: Stage, parameters: Object): void {
 			new MmAdapterCreator(receiver, stage, parameters.uid, parameters.pk);
 		}
 	}
